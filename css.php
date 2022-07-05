@@ -78,7 +78,6 @@
 	background-color: <?php echo $colors['content']['bg_color']; ?>;
 	box-shadow: 0 2px 6px rgba(0, 0, 0, .15);
 	height: auto !important;
-	margin-left: -<?php echo $double; ?>px;
 	position: fixed;
 		top: 0;
 	width: <?php echo $content_width; ?>px;
@@ -104,14 +103,11 @@
 
 .toc-fixed .toc.sticky .toc-list {
 	background-color: <?php echo $colors['site']['accent']; ?>;
-	padding-bottom: <?php echo $half; ?>px;
-	padding-top: <?php echo $half; ?>px;
-}
-
-.toc-fixed .toc.sticky .toc-list {
 	border-left: 0;
 	max-height: <?php echo $single * 10; ?>px;
 	overflow-y: auto;
+	padding-bottom: <?php echo $half; ?>px;
+	padding-top: <?php echo $half; ?>px;
 }
 
 .toc-fixed ul.toc .toc-item { padding-left: <?php echo $half; ?>px; }
@@ -148,6 +144,7 @@
 	}
 	.toc-full.toc-right .toc { margin-left: <?php echo ( $post_width / $site_width ) * 100; ?>%; }
 	.toc-full .toc-inner { padding: <?php echo $half; ?>px; }
+	.toc-fixed .toc.sticky .toc-inner { margin-left: -<?php echo $double; ?>px; }
 	.toc .toc-title { cursor: default; }
 	.toc .toc-list {
 		font-size: 15px;
@@ -164,6 +161,7 @@
 @media all and (max-width: <?php echo $site_width; ?>px) {
 	.toc.sticky .toc-inner { max-width: <?php echo ( $gutter_width / $site_width ) * 100; ?>%; }
 	.toc.toc-right.sticky .toc-inner { max-width: <?php echo ( $post_width / $site_width ) * 100; ?>%; }
+	.toc-fixed .toc.sticky .toc-inner { max-width: <?php echo ( $content_width / $site_width ) * 100; ?>%; }
 }
 
 @media all and (max-width: 900px) {
@@ -171,7 +169,8 @@
 		font-size: 15px;
 		line-height: 23px;		
 	}
-	.toc .toc-inner {
+	.toc .toc-inner,
+	.toc-fixed .toc.sticky .toc-inner {
 		left: 0;
 		max-width: 100%;
 		width: 100%;

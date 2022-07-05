@@ -32,7 +32,7 @@ tableOfContents: function() {
 			MD.addClass( this, 'active' );
 			MD.removeClass( toc, 'open' );
 			window.scrollTo({
-				'top' : ( headings[order].offsetTop - headings[order].clientHeight ) + contentBoxOffsetTop,
+				'top' : ( headings[order].offsetTop /* - headings[order].clientHeight */ ) + contentBoxOffsetTop,
 				'behavior' : 'smooth'
 			});
 			window.history.pushState( {}, '', window.location.pathname + '#' + id );

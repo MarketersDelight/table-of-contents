@@ -24,6 +24,7 @@ class md_table_of_contents extends md_api {
 		$this->design = new md_design;
 		add_action( 'save_post', array( $this, 'save_headings' ), 10, 2 );
 		add_action( 'md_settings_content_single', array( $this, 'admin_page' ) );
+		add_action( 'md_layout_content_options', array( $this, 'layout_fields' ) );
 	}
 
 	/**
@@ -50,6 +51,24 @@ class md_table_of_contents extends md_api {
 						'options' => array( 'left', 'right' )
 					)
 				)
+			),
+			'meta_box' => array(
+				'name' => $this->name,
+				'fields' => array(
+					'start_position' => array( 'type' => 'number' ),
+					'headings' => array(
+						'type' => 'checkbox',
+						'options' => $this->headings
+					),
+					'alignment' => array(
+						'type' => 'select',
+						'options' => array( 'left', 'right' )
+					),
+					'layout' => array(
+						'type' => 'checkbox',
+						'options' => array( 'remove' )
+					)
+				)
 			)
 		);
 	}
@@ -72,15 +91,34 @@ class md_table_of_contents extends md_api {
 	}
 
 	/**
-	 * Update MD post meta with Table of Contents data.
+	 * Create meta box template fields.
+	 *
+	 * @since 5.5
+	 */
+	
+	public function meta_box() {
+		$headings = $this->headings; 
+		$design = $this->design->values();
+		$single = esc_html( $design['typography']['body']['line_height']['desktop'] );
+		$options = array();
+		foreach ( $headings as $heading )
+			$options[$heading] = sprintf( __( "Heading %s", 'md-toc' ), str_replace( 'h', '', $heading ) );
+		include( md_template( 'dropins', 'table-of-contents/meta-box', true ) );
+	}
+
+	/**
+	 * Add Remove TOC checkbox to MD Layout meta box settings.
 	 *
 	 * @since 5.5
 	 */
 
-	public function save_headings( $post_id, $post ) {
-		$post_meta = md_post_meta();
-		$post_meta['table_of_contents'] = $this->parse_headings( $post->post_content );
-		update_post_meta( $post_id, 'marketers_delight', $post_meta );
+	public function layout_fields() {
+		$this->fields->field( 'layout', array(
+			'type' => 'checkbox',
+			'options' => array(
+				'remove' => __( 'Remove <b>Table of Contents</b>', 'md-toc' )
+			)
+		) );
 	}
 
 	/**
@@ -113,6 +151,18 @@ class md_table_of_contents extends md_api {
 	}
 
 	/**
+	 * Update MD post meta with Table of Contents data.
+	 *
+	 * @since 5.5
+	 */
+
+	public function save_headings( $post_id, $post ) {
+		$post_meta = md_post_meta();
+		$post_meta['table_of_contents']['list'] = $this->parse_headings( $post->post_content );
+		update_post_meta( $post_id, 'marketers_delight', $post_meta );
+	}
+
+	/**
 	 * Load dynamic CSS file to MD's style.css build process.
 	 *
 	 * @since 5.5
@@ -141,8 +191,8 @@ class md_table_of_contents extends md_api {
 	 */
 
 	public function template() {
-		if ( is_singular() ) {
-			$headings = md_post_meta( 'table_of_contents' );
+		if ( is_singular() && ! md_post_meta( array( 'table_of_contents', 'layout', 'remove' ) ) ) {
+			$headings = md_post_meta( array( 'table_of_contents', 'list' ) );
 			if ( ! empty( $headings ) ) {
 				add_action( 'md_hook_before_the_content', array( $this, 'html' ) );
 				add_action( 'wp_enqueue_scripts', array( $this, 'script' ) );
@@ -158,10 +208,16 @@ class md_table_of_contents extends md_api {
 	 */
 
 	public function content_box_classes( $classes ) {
-		$alignment = md_setting( array( 'table_of_contents', 'alignment' ) );
-		$classes[] = md_has_sidebar() ? 'toc-fixed' : 'toc-full';
+		$alignment = md_post_meta( array( 'table_of_contents', 'alignment' ) );
+
+		if ( empty( $alignment ) )
+			$alignment = md_setting( array( 'table_of_contents', 'alignment' ) );
+
 		if ( ! empty( $alignment ) )
 			$classes[] = esc_attr( "toc-$alignment" );
+
+		$classes[] = md_has_sidebar() ? 'toc-fixed' : 'toc-full';
+
 		return $classes;
 	}
 
@@ -173,10 +229,12 @@ class md_table_of_contents extends md_api {
 
 	public function html() {
 		$toc = md_setting( array( 'table_of_contents' ) );
-		$headings = md_post_meta( 'table_of_contents' );
-		$show_headings = md_setting( array( 'table_of_contents', 'headings' ) );
+		$show_headings = md_post_meta( array( 'table_of_contents', 'headings' ) );
+		if ( empty( $show_headings ) )
+			$show_headings = md_setting( array( 'table_of_contents', 'headings' ) );
 		$style = md_setting( array( 'table_of_contents', 'style' ) );
 		$html = ! empty( $style ) && ! empty( $style['numbers'] ) ? 'ol' : 'ul';
+		$headings = md_post_meta( array( 'table_of_contents', 'list' ) );
 		include( md_template( 'dropins', 'table-of-contents/table-of-contents', true ) );
 	}
 
