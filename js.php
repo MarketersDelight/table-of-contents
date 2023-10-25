@@ -2,15 +2,12 @@
 
 tableOfContents: function() {
 	var headings = [], pos = 0, ticking = false,
-		contentBox = document.getElementById( 'content_box' ),
-		contentBoxOffsetTop = contentBox.offsetTop,
 		toc = document.getElementById( 'table_of_contents' ),
-		tocHeight = toc.clientHeight,
-		tocOffsetTop = toc.offsetTop + contentBoxOffsetTop,
 		tocTitle = document.getElementById( 'toc_title' ),
 		content = document.getElementById( 'the_content' ),
 		postContent = content.getElementsByTagName( '*' ),
-		tocItems = document.getElementsByClassName( 'toc-item' );
+		tocItems = document.getElementsByClassName( 'toc-item' ),
+		adminBar = MDJS.hasAdminBar ? 32 : 0;
 
 	MD.onScroll();
 
@@ -23,16 +20,20 @@ tableOfContents: function() {
 			id = tocItem.getAttribute( 'data-toc-id' );
 
 		headings[i].setAttribute( 'id', id );
+		headings[i].insertAdjacentHTML( 'beforeend', '<a href="#' + id + '" class="toc-anchor" title="Copy link"></a>' );
 
 		tocItem.onclick = function( e ) {
 			var id = this.getAttribute( 'data-toc-id' ),
-				order = this.getAttribute( 'data-toc-order' );
+				order = this.getAttribute( 'data-toc-order' ),
+				body = document.body.getBoundingClientRect(),
+				hOffset = document.getElementById( id ).getBoundingClientRect();
+
 			for ( var c = 0; c < tocItems.length; c++ )
 				MD.removeClass( tocItems[c], 'active' );
 			MD.addClass( this, 'active' );
 			MD.removeClass( toc, 'open' );
 			window.scrollTo({
-				'top' : ( headings[order].offsetTop /* - headings[order].clientHeight */ ) + contentBoxOffsetTop,
+				'top' : ( hOffset.top - body.top - headings[order].clientHeight - adminBar ),
 				'behavior' : 'smooth'
 			});
 			window.history.pushState( {}, '', window.location.pathname + '#' + id );

@@ -3,19 +3,18 @@
 /*------------------------------*\
 	$TABLE OF CONTENTS
 \*------------------------------*/
-/*
-.toc {
-	background-color: <?php echo $colors['content']['bg_color']; ?>;
-	border-radius: 5px;
-}
-*/
+
+.toc-inner { border-radius: 5px; }
+
+.style-default .toc-inner { background-color: <?php echo $colors['content']['bg_color']; ?>; }
+.style-minimal .toc-inner { background-color: <?php echo $colors['site']['bg_color']; ?>; }
 
 .toc .toc-title {
 	cursor: pointer;
 	margin-bottom: <?php echo $half; ?>px;
 }
 
-.toc-title .md-icon-book {
+.toc-title [class*="md-icon-"] {
 	color: <?php echo $colors['site']['primary']; ?>;
 	margin-right: <?php echo $small; ?>px;
 }
@@ -80,7 +79,6 @@
 	height: auto !important;
 	position: fixed;
 		top: 0;
-	width: <?php echo $content_width; ?>px;
 	z-index: 100;
 }
 
@@ -106,14 +104,27 @@
 	border-left: 0;
 	max-height: <?php echo $single * 10; ?>px;
 	overflow-y: auto;
-	padding-bottom: <?php echo $half; ?>px;
-	padding-top: <?php echo $half; ?>px;
+	padding: <?php echo $half; ?>px;
 }
 
 .toc-fixed ul.toc .toc-item { padding-left: <?php echo $half; ?>px; }
 
 .toc-fixed .toc.sticky .toc-list { display: none; }
 .toc-fixed .toc.sticky.open .toc-list { display: block; } 
+
+.toc-anchor {
+	background-color: rgba(0, 0, 0, 0.07);
+	margin-left: <?php echo $third; ?>px;
+}
+
+.toc-anchor:before {
+	content: '\e827';
+	color: <?php echo $colors['site']['primary']; ?>;
+	font-family: 'md-icon';
+	line-height: 1;
+}
+
+.toc-anchor:hover { background-color: rgba(0, 0, 0, 0.1); }
 
 /* FULL-WIDTH STYLE */
 
@@ -131,37 +142,43 @@
 .has-md-admin-bar .toc.sticky .toc-inner, .has-md-admin-bar .toc-fixed .toc.sticky { top: <?php echo $admin_bar_height; ?>px; }
 
 @media all and (min-width: 900px) {
+	.toc-full .toc-inner { max-width: <?php echo $gutter_width; ?>px; }
 	.toc-full .toc .toc-list { border-left: 0; }
 	.toc-full .toc {
 		margin-left: -<?php echo ( $gutter_width / $site_width ) * 100; ?>%;
-		max-width: <?php echo ( $gutter_width / $site_width ) * 100; ?>%;
 		position: absolute;
-			top: <?php echo md_setting( array( 'table_of_contents', 'start_position' ), ( $quad * 2 ) ); ?>px;
 	}
 	.toc-full.toc-right .toc {
 		margin-left: -<?php echo ( $post_width / $site_width ) * 100; ?>%;
 		max-width: <?php echo ( $post_width / $site_width ) * 100; ?>%;
 	}
 	.toc-full.toc-right .toc { margin-left: <?php echo ( $post_width / $site_width ) * 100; ?>%; }
-	.toc-full .toc-inner { padding: <?php echo $half; ?>px; }
-	.toc-fixed .toc.sticky .toc-inner { margin-left: -<?php echo $double; ?>px; }
+	.toc-full .toc-inner { padding: 0 <?php echo $half; ?>px <?php echo $half; ?>px; }
+	.toc-full .toc.sticky .toc-inner { padding-top: <?php echo $half; ?>px; }
+	.toc-fixed .toc.sticky .toc-inner { margin-left: -<?php echo $mid; ?>px; }
 	.toc .toc-title { cursor: default; }
 	.toc .toc-list {
 		font-size: 15px;
 		line-height: 23px;		
 	}
+	.toc-anchor { display: none; }
+	h2:hover .toc-anchor, h3:hover .toc-anchor,
+	h4:hover .toc-anchor, h5:hover .toc-anchor,
+	h6:hover .toc-anchor { display: inline-flex; }
 }
 
 @media all and (min-width: <?php echo $site_width; ?>px) {
 	.toc-full .toc.sticky { margin-left: -<?php echo $gutter_width; ?>px; }
 	.toc-full.toc-right .toc.sticky { margin-left: <?php echo $post_width; ?>px; }
-	.toc-full .toc-inner { max-width: <?php echo $gutter_width; ?>px; }
+	.toc-fixed .toc.sticky .toc-inner {
+		max-width: <?php echo $content_width; ?>px;
+		width: 100%;
+	}
 }
 
 @media all and (max-width: <?php echo $site_width; ?>px) {
-	.toc.sticky .toc-inner { max-width: <?php echo ( $gutter_width / $site_width ) * 100; ?>%; }
+	.full .toc.sticky .toc-inner { max-width: <?php echo ( $gutter_width / $site_width ) * 100; ?>%; }
 	.toc.toc-right.sticky .toc-inner { max-width: <?php echo ( $post_width / $site_width ) * 100; ?>%; }
-	.toc-fixed .toc.sticky .toc-inner { max-width: <?php echo ( $content_width / $site_width ) * 100; ?>%; }
 }
 
 @media all and (max-width: 900px) {
@@ -175,7 +192,7 @@
 		max-width: 100%;
 		width: 100%;
 	}
-	.toc.sticky .toc-inner {
+	.full .toc.sticky .toc-inner {
 		box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
 		max-width: 100%;
 	}
