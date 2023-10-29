@@ -30,11 +30,12 @@
 
 .toc:hover .toc-title-icon { background-color: rgba(0, 0, 0, 0.2); }
 
-.toc .toc-list { margin-left: 0; }
+.toc .toc-list {
+	margin-left: 0;
+	padding-left: <?php echo $half; ?>px;
+}
 
 .toc ul.toc-list { list-style: none; }
-
-.toc-fixed .toc-list { padding-left: <?php echo $half; ?>px; }
 
 .toc .toc-item {
 	color: <?php echo $colors['site']['text-sec']; ?>;
@@ -110,7 +111,7 @@
 .toc-fixed ul.toc .toc-item { padding-left: <?php echo $half; ?>px; }
 
 .toc-fixed .toc.sticky .toc-list { display: none; }
-.toc-fixed .toc.sticky.open .toc-list { display: block; } 
+.toc-fixed .toc.sticky.open .toc-list { display: block; }
 
 .toc-anchor {
 	background-color: rgba(0, 0, 0, 0.07);
@@ -159,7 +160,7 @@
 	.toc .toc-title { cursor: default; }
 	.toc .toc-list {
 		font-size: 15px;
-		line-height: 23px;		
+		line-height: 23px;
 	}
 	.toc-anchor { display: none; }
 	h2:hover .toc-anchor, h3:hover .toc-anchor,
@@ -184,7 +185,7 @@
 @media all and (max-width: 900px) {
 	.toc .toc-list {
 		font-size: 15px;
-		line-height: 23px;		
+		line-height: 23px;
 	}
 	.toc .toc-inner,
 	.toc-fixed .toc.sticky .toc-inner {

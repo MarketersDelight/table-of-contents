@@ -6,7 +6,6 @@
  * Description: A smart and nimble table of contents for your articles.
  * Author: Alex, Kolakube
  * Author URI: https://kolakube.com/
- * Since MD5.5
  */
 
 if ( ! defined( 'WPINC' ) ) die;
