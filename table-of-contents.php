@@ -83,6 +83,7 @@ class md_table_of_contents extends md_api {
 	public function template() {
 		if ( is_singular() && ! md_post_meta( array( 'table_of_contents', 'layout', 'remove' ) ) ) {
 			$headings = md_post_meta( array( 'table_of_contents', 'list' ) );
+
 			if ( ! empty( $headings ) ) {
 				add_action( 'md_hook_before_the_content', array( $this, 'html' ) );
 				add_action( 'wp_enqueue_scripts', array( $this, 'script' ) );
