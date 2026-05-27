@@ -4,13 +4,6 @@
 	$TABLE OF CONTENTS
 \*------------------------------*/
 
-.sidebar .widget_md_table_of_contents_widget {
-	position: sticky;
-		inset-block-start: 0;
-}
-
-.admin-bar .sidebar .widget_md_table_of_contents_widget { inset-block-start: calc(var(--wp-admin--admin-bar--height) + <?php echo $single; ?>px); }
-
 .toc .widget-title {
 	align-items: center;
 	display: flex;
@@ -20,8 +13,6 @@
 .toc .widget-title-label { flex: 1; }
 
 .toc-list { list-style: none; }
-
-.format .widget .toc-list { margin-inline-start: -<?php echo $half; ?>px; }
 
 .toc-list .toc-item { margin-block-end: 0; }
 
@@ -58,13 +49,46 @@
 .toc-h5 .toc-item-label { padding-inline-start: <?php echo $half + ( $third * 4 ); ?>px; }
 .toc-h6 .toc-item-label { padding-inline-start: <?php echo $half + ( $third * 6); ?>px; }
 
-.toc-item .toggle { padding: <?php echo $small; ?>px <?php echo $half; ?>px; }
+.toc-trigger { padding: <?php echo $small; ?>px <?php echo $half; ?>px; }
 
 .toc-sublist { display: none; }
 
 .toc-item:is(.active, .child-active, .toggle-toc-item) .toc-sublist { display: block; }
-.toc-item:is(.active, .child-active, .toggle-toc-item) .trigger-icon:before { content: '\e817'; }
+.toc.open .widget-title .toc-trigger:before,
+.toc-item:is(.active, .child-active, .toggle-toc-item) .toc-trigger:before { content: '\e817'; }
 
 @media (min-width: 900px) {
-	.toc .toc-title-icon { display: none; }
+	.sidebar .widget_md_table_of_contents_widget {
+		background-color: <?php echo $colors['site']['bg_color']; ?>;
+		padding-block-start: <?php echo $single; ?>px;
+		position: sticky;
+			inset-block-start: 0;
+	}
+	.admin-bar .sidebar .widget_md_table_of_contents_widget { padding-block-start: calc(var(--wp-admin--admin-bar--height) + <?php echo $single; ?>px); }
+	.toc .widget-title .toc-trigger { display: none; }
+	.format .widget .toc-list { margin-inline-start: -<?php echo $half; ?>px; }
+}
+
+@media (max-width: 900px) {
+	.toc {
+		background-color: <?php echo $colors['site']['accent']; ?>;
+		border-block-start: 1px solid <?php echo $colors['site']['tertiary']; ?>;
+		position: fixed;
+			inset-block-end: 0;
+			inset-inline: 0;
+	}
+	.toc .widget-title {
+		cursor: pointer;
+		margin-block-end: 0;
+		padding: <?php echo $half; ?>px;
+	}
+	.toc.open .widget-title {
+		border-block-end: 1px solid <?php echo $colors['site']['tertiary']; ?>;
+		padding-block-end: <?php echo $half; ?>px;
+	}
+	.toc .toc-list {
+		display: none;
+		padding: <?php echo $half; ?>px;
+	}
+	.toc.open .toc-list { display: block; }
 }

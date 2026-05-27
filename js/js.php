@@ -25,6 +25,7 @@ tableOfContents: function() {
 					behavior: 'smooth'
 				});
 				window.history.pushState( {}, '', '#' + item.getAttribute( 'data-toc-id' ) );
+				MD.removeClass( toc, 'open' );
 			};
 		})( tocItems[i], i );
 	}

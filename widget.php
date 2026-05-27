@@ -44,16 +44,7 @@ class md_table_of_contents_widget extends WP_Widget {
 
 	public function update( $new, $val ) {
         $val['title'] = esc_html( $new['title'] );
-        /*
-		$sanitize = new md_sanitize;
-		$val['title'] = $sanitize->text( $new['title'] );
-		$val['see_more'] = $sanitize->text( $new['see_more'] );
-		$val['taxonomy'] = $sanitize->select( $new['taxonomy'], md_taxonomy_meta() );
-		$val['posts_per_category'] = $sanitize->number( $new['posts_per_category'] );
-		$val['direction'] = $sanitize->select( $new['direction'], array( 'DESC' ) );
-		$val['order'] = $sanitize->select( $new['order'], array_keys( $this->terms_order ) );
-		$val['exclude'] = esc_html( $new['exclude'] );
-*/
+
 		return $val;
 	}
 
