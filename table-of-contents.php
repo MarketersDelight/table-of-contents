@@ -40,6 +40,30 @@ class md_table_of_contents extends md_api {
 		$this->id = str_replace( '-', '_', $this->slug );
 
 		add_action( 'save_post', array( $this, 'save_headings' ), 10, 2 );
+		add_action( 'md_hook_layout_admin_single_fields', array( $this, 'admin_fields' ) );
+		add_filter( 'md_filter_save_layout_fields', function( $fields ) {
+			$fields['toc'] = array(
+				'type' => 'checkbox',
+				'options' => array( 'add' )
+			);
+			return $fields;
+		});
+	}
+
+	/**
+	 * Add Remove TOC checkbox to MD Layout meta box settings.
+	 *
+	 * @since 5.5
+	 */
+
+	public function admin_fields() {
+		$this->fields->field( 'toc', array(
+			'id' => 'layout',
+			'type' => 'checkbox',
+			'options' => array(
+				'add' => __( 'Add <b>Table of Contents</b>', 'md-toc' )
+			)
+		) );
 	}
 
 	/**
@@ -173,16 +197,6 @@ class md_table_of_contents extends md_api {
 		$post_meta[$this->id]['list'] = $this->parse_headings( $post->post_content );
 
 		update_post_meta( $post_id, 'marketers_delight', $post_meta );
-	}
-
-	/**
-	 * No meta box for 2.0.
-	 *
-	 * @since 1.0
-	 */
-
-	public function register() {
-		return array();
 	}
 
 }
