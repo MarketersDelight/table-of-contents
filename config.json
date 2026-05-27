@@ -1,8 +1,8 @@
 {
   "name": "Table of Contents",
   "author": "Alex, Kolakube",
-  "version": "1.0.0",
-  "description": "A smart, auto-generated table of contents for your articles.",
+  "version": "2.0",
+  "description": "An auto-generated table of contents for your articles with deep layout integration and powerful functionality.",
   "dropin_url": "https://marketersdelight.com/dropins/table-of-contents",
   "author_url": "https://kolakube.com/",
   "settings_url": "admin.php?page=md_settings&tab=md_content#table_of_contents",

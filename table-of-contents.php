@@ -1,16 +1,33 @@
 <?php
 /**
  * Dropin Name: Table of Contents
- * Version: 1.0
+ * Version: 2.0
  * Dropin URI: https://marketersdelight.com/dropins/table-of-contents/
- * Description: A smart and nimble table of contents for your articles.
+ * Description: An auto-generated table of contents for your articles with deep layout integration and powerful functionality.
  * Author: Alex, Kolakube
  * Author URI: https://kolakube.com/
  */
 
-if ( ! defined( 'WPINC' ) ) die;
-
 class md_table_of_contents extends md_api {
+
+	/**
+	 * Define properties
+	 */
+
+	public $id;
+	public $name;
+	private $headings;
+	public $slug = 'table-of-contents';
+
+	/**
+	 * Included used files by TOC.
+	 *
+	 * @since 2.0
+	 */
+
+	public function includes() {
+		require_once 'functions.php';
+	}
 
 	/**
 	 * Run all WP action hooks and filters.
@@ -20,76 +37,9 @@ class md_table_of_contents extends md_api {
 
 	public function actions() {
 		$this->name = __( 'Table of Contents', 'md-toc' );
-		$this->headings = array( 'h2', 'h3', 'h4', 'h5', 'h6' );
-		$this->design = new md_design;
+		$this->id = str_replace( '-', '_', $this->slug );
 
 		add_action( 'save_post', array( $this, 'save_headings' ), 10, 2 );
-//		add_action( 'md_settings_content_single', array( $this, 'admin_page' ) );
-		add_action( 'md_post_layout_content_options', array( $this, 'layout_fields' ) );
-	}
-
-	/**
-	 * Run all WP action hooks and filters.
-	 *
-	 * @since 1.0
-	 */
-
-	public function register() {
-		return array(
-			'admin_page' => array(
-				'fields' => array(
-					'start_position' => array( 'type' => 'number' ),
-					'headings' => array(
-						'type' => 'checkbox',
-						'options' => $this->headings
-					),
-					'style' => array(
-						'type' => 'checkbox',
-						'options' => array( 'numbers', 'hide_indent' )
-					),
-					'alignment' => array(
-						'type' => 'select',
-						'options' => array( 'left', 'right' )
-					)
-				)
-			),
-			'meta_box' => array(
-				'name' => $this->name,
-				'fields' => array(
-					'start_position' => array( 'type' => 'number' ),
-					'headings' => array(
-						'type' => 'checkbox',
-						'options' => $this->headings
-					),
-					'alignment' => array(
-						'type' => 'select',
-						'options' => array( 'left', 'right' )
-					),
-					'layout' => array(
-						'type' => 'checkbox',
-						'options' => array( 'remove' )
-					)
-				)
-			)
-		);
-	}
-
-	/**
-	 * Hook to WP template_redirect to add, remove, and manipulate frontend templates.
-	 *
-	 * @since 1.0
-	 */
-
-	public function template() {
-		if ( is_singular() && ! md_post_meta( array( 'table_of_contents', 'layout', 'remove' ) ) ) {
-			$headings = md_post_meta( array( 'table_of_contents', 'list' ) );
-
-			if ( ! empty( $headings ) ) {
-				add_action( 'md_hook_before_the_content', array( $this, 'html' ) );
-				add_action( 'wp_enqueue_scripts', array( $this, 'script' ) );
-				add_filter( 'md_filter_content_box_classes', array( $this, 'content_box_classes' ) );
-			}
-		}
 	}
 
 	/**
@@ -98,10 +48,10 @@ class md_table_of_contents extends md_api {
 	 * @since 1.0
 	 */
 
-	public function css( $templates ) {
-		$templates['table-of-contents'] = md_css( 'dropins', 'table-of-contents/css', true );
+	public function css( $css ) {
+		$css[$this->slug] = md_css( 'dropins', "$this->slug/css", true );
 
-		return $templates;
+		return $css;
 	}
 
 	/**
@@ -110,57 +60,77 @@ class md_table_of_contents extends md_api {
 	 * @since 1.0
 	 */
 
-	public function js( $templates ) {
-		$templates['table-of-contents'] = md_js( 'dropins', 'table-of-contents/js', true );
+	public function js( $js ) {
+		$js[$this->slug] = md_js( 'dropins', "$this->slug/js/js", true );
 
-		return $templates;
+		return $js;
 	}
 
 	/**
-	 * Hook to WP template_redirect to add, remove, and manipulate frontend templates.
+	 * Load TOC scrolling behaviors to MDJS onScroll event.
 	 *
-	 * @since 1.0
+	 * @since 2.0
 	 */
 
-	public function script() {
-		wp_add_inline_script( 'marketers-delight', "\tMD.tableOfContents();" );
+	public function onscroll() {
+		include md_js( 'dropins', "$this->slug/js/onscroll", true );
 	}
 
 	/**
-	 * Add onScroll JS to single onScroll in JS template.
+	 * Enqueue inline script to initialise the TOC module.
 	 *
 	 * @since 1.0
 	 */
 
-	public function onscroll() { ?>
-		<script>
-			var toc = document.getElementById( 'table_of_contents' );
-			if ( toc !== null ) {
-				var tocHeight = toc.clientHeight,
-					tocOffsetTop = toc.offsetTop + contentBoxOffsetTop;
-				if ( pos > tocOffsetTop + tocHeight ) {
-					MD.addClass( toc, 'sticky' );
-					toc.style.height = tocHeight + 'px';
-				}
-				else
-					MD.removeClass( toc, 'sticky' );
-				if ( pos > content.clientHeight + contentBoxOffsetTop )
-					MD.removeClass( toc, 'sticky' );
-			}
-		</script>
-	<?php }
+	public function enqueue() {
+		wp_add_inline_script( 'marketers-delight', "MD.tableOfContents();" );
+	}
 
 	/**
-	 * Update MD post meta with Table of Contents data.
+	 * Register and create widget.
+	 *
+	 * @since 2.0
+	 */
+
+	public function widgets() {
+		require_once 'widget.php';
+		register_widget( 'md_table_of_contents_widget' );
+	}
+
+	/**
+	 * Hook into the frontend template on singular posts that have headings.
 	 *
 	 * @since 1.0
 	 */
 
-	public function save_headings( $post_id, $post ) {
-		$post_meta = md_post_meta();
-		$post_meta['table_of_contents']['list'] = $this->parse_headings( $post->post_content );
+	public function template() {
+		$this->headings = md_post_meta( array( $this->id, 'list' ) );
 
-		update_post_meta( $post_id, 'marketers_delight', $post_meta );
+		if ( is_singular() && ! empty( $this->headings ) ) {
+//			add_action( 'md_hook_before_the_content', 'md_toc' );
+//			add_filter( 'md_filter_content_box_classes', array( $this, 'content_box_classes' ) );
+		}
+	}
+
+	/**
+	 * Add layout classes to the content box based on TOC alignment setting.
+	 *
+	 * @since 1.0
+	 */
+
+	public function content_box_classes( $classes ) {
+		/*
+		$alignment = md_post_meta( array( 'table_of_contents', 'alignment' ) );
+
+		if ( empty( $alignment ) )
+			$alignment = md_setting( array( 'table_of_contents', 'alignment' ) );
+
+		if ( ! empty( $alignment ) )
+			$classes[] = esc_attr( "toc-$alignment" );
+
+		$classes[] = md_has_sidebar() ? 'toc-fixed' : 'toc-full';
+*/
+		return $classes;
 	}
 
 	/**
@@ -180,11 +150,11 @@ class md_table_of_contents extends md_api {
 		$tags = $tags[0];
 
 		foreach ( $headings as $order => $heading ) {
-			$tag = str_replace( array( '<', '>' ), '', $tags[$order] );
+			preg_match( '/h[2-6]/', $tags[$order], $match );
 			$heading = strip_tags( $heading );
 			$table[$order] = array(
-				'tag' => $tag,
-				'id' => str_replace( ' ', '_', $heading ),
+				'tag' => $match[0],
+				'id' => sanitize_title( $heading ),
 				'text' => $heading
 			);
 		}
@@ -193,95 +163,26 @@ class md_table_of_contents extends md_api {
 	}
 
 	/**
-	 * Run all WP action hooks and filters.
+	 * Update MD post meta with Table of Contents data.
 	 *
 	 * @since 1.0
 	 */
 
-	public function admin_page() {
-		$name = $this->name;
-		$headings = $this->headings;
-		$design = $this->design->values();
-		$single = esc_html( $design['typography']['body']['line_height']['desktop'] );
-		$options = array();
+	public function save_headings( $post_id, $post ) {
+		$post_meta = md_post_meta();
+		$post_meta[$this->id]['list'] = $this->parse_headings( $post->post_content );
 
-		foreach ( $headings as $heading )
-			$options[$heading] = sprintf( __( "Heading %s", 'md-toc' ), str_replace( 'h', '', $heading ) );
-
-		include( md_template( 'dropins', 'table-of-contents/admin-page', true ) );
+		update_post_meta( $post_id, 'marketers_delight', $post_meta );
 	}
 
 	/**
-	 * Create meta box template fields.
+	 * No meta box for 2.0.
 	 *
 	 * @since 1.0
 	 */
 
-	public function meta_box() {
-		$headings = $this->headings;
-		$design = $this->design->values();
-		$single = esc_html( $design['typography']['body']['line_height']['desktop'] );
-		$options = array();
-
-		foreach ( $headings as $heading )
-			$options[$heading] = sprintf( __( "Heading %s", 'md-toc' ), str_replace( 'h', '', $heading ) );
-
-		include( md_template( 'dropins', 'table-of-contents/meta-box', true ) );
-	}
-
-	/**
-	 * Add "Remove TOC checkbox" to MD Layout meta box settings.
-	 *
-	 * @since 1.0
-	 */
-
-	public function layout_fields() {
-		$this->fields->field( 'layout', array(
-			'type' => 'checkbox',
-			'options' => array(
-				'remove' => __( 'Remove <b><acronym title="Table of Contents">TOC</acronym></b>', 'md-toc' )
-			)
-		) );
-	}
-
-	/**
-	 * Load template markup for TOC box.
-	 *
-	 * @since 1.0
-	 */
-
-	public function html() {
-		$toc = md_setting( array( 'table_of_contents' ) );
-		$show_headings = md_post_meta( array( 'table_of_contents', 'headings' ) );
-
-		if ( empty( $show_headings ) )
-			$show_headings = md_setting( array( 'table_of_contents', 'headings' ) );
-
-		$style = md_setting( array( 'table_of_contents', 'style' ) );
-		$html = ! empty( $style ) && ! empty( $style['numbers'] ) ? 'ol' : 'ul';
-		$headings = md_post_meta( array( 'table_of_contents', 'list' ) );
-
-		include( md_template( 'dropins', 'table-of-contents/table-of-contents', true ) );
-	}
-
-	/**
-	 * Add custom class to content box.
-	 *
-	 * @since 1.0
-	 */
-
-	public function content_box_classes( $classes ) {
-		$alignment = md_post_meta( array( 'table_of_contents', 'alignment' ) );
-
-		if ( empty( $alignment ) )
-			$alignment = md_setting( array( 'table_of_contents', 'alignment' ) );
-
-		if ( ! empty( $alignment ) )
-			$classes[] = esc_attr( "toc-$alignment" );
-
-		$classes[] = md_has_sidebar() ? 'toc-fixed' : 'toc-full';
-
-		return $classes;
+	public function register() {
+		return array();
 	}
 
 }
