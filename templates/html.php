@@ -20,7 +20,7 @@
 
 			<?php if ( ! empty( $fields['children'] ) ) : ?>
 
-			<ul class="toc-sublist">
+			<ol class="toc-sublist">
 
 				<?php foreach ( $fields['children'] as $child ) : ?>
 				<li class="toc-item toc-<?php echo esc_attr( $child['tag'] ); ?>">
@@ -30,7 +30,7 @@
 				</li>
 				<?php endforeach; ?>
 
-			</ul>
+				</ol>
 
 			<?php endif; ?>
 

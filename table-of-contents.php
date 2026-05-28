@@ -39,31 +39,38 @@ class md_table_of_contents extends md_api {
 		$this->name = __( 'Table of Contents', 'md-toc' );
 		$this->id = str_replace( '-', '_', $this->slug );
 
-		add_action( 'save_post', array( $this, 'save_headings' ), 10, 2 );
-		add_action( 'md_hook_layout_admin_single_fields', array( $this, 'admin_fields' ) );
-		add_filter( 'md_filter_save_layout_fields', function( $fields ) {
-			$fields['toc'] = array(
-				'type' => 'checkbox',
-				'options' => array( 'add' )
-			);
-			return $fields;
-		});
+		$this->admin_actions();
+
+		add_filter( 'md_filter_sticky_elements', function( $elements ) {
+			$elements[] = '#table_of_contents';
+			return $elements;
+		} );
 	}
 
 	/**
-	 * Add Remove TOC checkbox to MD Layout meta box settings.
+	 * Run admin hooks and filters.
 	 *
-	 * @since 5.5
+	 * @since 6.0
 	 */
 
-	public function admin_fields() {
-		$this->fields->field( 'toc', array(
-			'id' => 'layout',
-			'type' => 'checkbox',
-			'options' => array(
-				'add' => __( 'Add <b>Table of Contents</b>', 'md-toc' )
-			)
-		) );
+	private function admin_actions() {
+		add_action( 'save_post', array( $this, 'save_headings' ), 10, 2 );
+
+		add_action( 'md_hook_layout_admin_single_fields', function( $fields ) {
+			include md_template( 'dropins', "{$this->slug}/meta-box", true );
+		} );
+
+		add_filter( 'md_filter_save_layout_fields', function( $fields ) {
+			$fields['toc'] = array(
+				'type' => 'checkbox',
+				'options' => array( 'add', 'sticky' )
+			);
+			$fields['toc_align'] = array(
+				'type' => 'select',
+				'options' => array( 'left', 'right' )
+			);
+			return $fields;
+		});
 	}
 
 	/**
@@ -101,16 +108,6 @@ class md_table_of_contents extends md_api {
 	}
 
 	/**
-	 * Enqueue inline script to initialise the TOC module.
-	 *
-	 * @since 1.0
-	 */
-
-	public function enqueue() {
-		wp_add_inline_script( 'marketers-delight', "MD.tableOfContents();" );
-	}
-
-	/**
 	 * Register and create widget.
 	 *
 	 * @since 2.0
@@ -119,6 +116,16 @@ class md_table_of_contents extends md_api {
 	public function widgets() {
 		require_once 'widget.php';
 		register_widget( 'md_table_of_contents_widget' );
+	}
+
+	/**
+	 * Enqueue inline script to initialise the TOC module.
+	 *
+	 * @since 1.0
+	 */
+
+	public function enqueue() {
+		wp_add_inline_script( 'marketers-delight', "MD.tableOfContents();" );
 	}
 
 	/**
@@ -137,24 +144,16 @@ class md_table_of_contents extends md_api {
 	}
 
 	/**
-	 * Add layout classes to the content box based on TOC alignment setting.
+	 * Update MD post meta with Table of Contents data.
 	 *
 	 * @since 1.0
 	 */
 
-	public function content_box_classes( $classes ) {
-		/*
-		$alignment = md_post_meta( array( 'table_of_contents', 'alignment' ) );
+	public function save_headings( $post_id, $post ) {
+		$post_meta = md_post_meta();
+		$post_meta[$this->id]['list'] = $this->parse_headings( $post->post_content );
 
-		if ( empty( $alignment ) )
-			$alignment = md_setting( array( 'table_of_contents', 'alignment' ) );
-
-		if ( ! empty( $alignment ) )
-			$classes[] = esc_attr( "toc-$alignment" );
-
-		$classes[] = md_has_sidebar() ? 'toc-fixed' : 'toc-full';
-*/
-		return $classes;
+		update_post_meta( $post_id, 'marketers_delight', $post_meta );
 	}
 
 	/**
@@ -187,16 +186,24 @@ class md_table_of_contents extends md_api {
 	}
 
 	/**
-	 * Update MD post meta with Table of Contents data.
+	 * Add layout classes to the content box based on TOC alignment setting.
 	 *
 	 * @since 1.0
 	 */
 
-	public function save_headings( $post_id, $post ) {
-		$post_meta = md_post_meta();
-		$post_meta[$this->id]['list'] = $this->parse_headings( $post->post_content );
+	public function content_box_classes( $classes ) {
+		/*
+		$alignment = md_post_meta( array( 'table_of_contents', 'alignment' ) );
 
-		update_post_meta( $post_id, 'marketers_delight', $post_meta );
+		if ( empty( $alignment ) )
+			$alignment = md_setting( array( 'table_of_contents', 'alignment' ) );
+
+		if ( ! empty( $alignment ) )
+			$classes[] = esc_attr( "toc-$alignment" );
+
+		$classes[] = md_has_sidebar() ? 'toc-fixed' : 'toc-full';
+*/
+		return $classes;
 	}
 
 }

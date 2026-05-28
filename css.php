@@ -4,6 +4,8 @@
 	$TABLE OF CONTENTS
 \*------------------------------*/
 
+.widget .toc:not(:last-child) { margin-block-end: <?php echo $single; ?>px; }
+
 .toc .widget-title {
 	align-items: center;
 	display: flex;
@@ -12,7 +14,7 @@
 
 .toc .widget-title-label { flex: 1; }
 
-.toc-list { list-style: none; }
+.toc ol { list-style: none; }
 
 .toc-list .toc-item { margin-block-end: 0; }
 
@@ -58,15 +60,17 @@
 .toc-item:is(.active, .child-active, .toggle-toc-item) .toc-trigger:before { content: '\e817'; }
 
 @media (min-width: 900px) {
-	.sidebar .widget_md_table_of_contents_widget {
-		background-color: <?php echo $colors['site']['bg_color']; ?>;
-		padding-block-start: <?php echo $single; ?>px;
+	.toc.stuck {
 		position: sticky;
 			inset-block-start: 0;
+			inset-inline: 0;
 	}
-	.admin-bar .sidebar .widget_md_table_of_contents_widget { padding-block-start: calc(var(--wp-admin--admin-bar--height) + <?php echo $single; ?>px); }
+	.header.stuck + .main .sidebar .toc.stuck { padding-block-start: <?php echo $triple; ?>px; }
+	.admin-bar .toc.stuck { padding-block-start: calc(var(--wp-admin--admin-bar--height) + <?php echo $single; ?>px); }
+	.admin-bar .header.stuck + .main .sidebar .toc.stuck { padding-block-start: calc(var(--wp-admin--admin-bar--height) + <?php echo $triple; ?>px); }
+	.sidebar .toc { background-color: <?php echo $colors['site']['bg_color']; ?>; }
 	.toc .widget-title .toc-trigger { display: none; }
-	.format .widget .toc-list { margin-inline-start: -<?php echo $half; ?>px; }
+	.format .toc .toc-list { margin-inline-start: -<?php echo $half; ?>px; }
 }
 
 @media (max-width: 900px) {
@@ -76,6 +80,7 @@
 		position: fixed;
 			inset-block-end: 0;
 			inset-inline: 0;
+		z-index: 85;
 	}
 	.toc .widget-title {
 		cursor: pointer;

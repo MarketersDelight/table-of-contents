@@ -15,6 +15,11 @@ function md_toc( $args = array() ) {
 		'after_title' => '</p>'
 	) );
 
+    $layout = md_post_type_field( array( 'layout', 'toc' ) );
+
+    if ( isset( $args['widget_id'] ) && ! empty( $layout['add'] ) )
+         return;
+
     $headings = md_post_meta( array( 'table_of_contents', 'list' ) );
 
 	if ( empty( $headings ) )
@@ -39,9 +44,5 @@ function md_toc( $args = array() ) {
 		}
 	}
 
-	echo $args['before_widget'];
-
 	include md_template( 'dropins', 'table-of-contents/html', true );
-
-	echo $args['after_widget'];
 }
