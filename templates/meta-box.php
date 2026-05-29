@@ -20,14 +20,4 @@ $fields->field( 'toc', array(
 	)
 ) );
 
-$fields->field( 'toc_align', array(
-	'type' => 'select',
-	'empty_label' => __( 'Show inline (default)', 'md-toc' ),
-	'style' => 'width: 100%',
-	'options' => array(
-		'left' => __( 'Align left', 'md-toc' ),
-		'right' => __( 'Align right', 'md-toc' )
-	)
-) );
-
 echo '</div></div>';

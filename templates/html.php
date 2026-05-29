@@ -1,7 +1,6 @@
 <nav id="table_of_contents" class="toc" aria-label="<?php echo __( 'Table of contents', 'md-toc' ); ?>">
 
-	<?php if ( $args['title'] )
-		echo $args['before_title'] . md_icon( 'book' ) . '<span class="widget-title-label">' . esc_html( $args['title'] ) . '</span>' . md_icon( 'angle-down', array( 'classes' => 'toc-trigger' ) ) . $args['after_title']; ?>
+	<p class="widget-title"><?php echo md_icon( 'book' ) . '<span class="widget-title-label">' . esc_html( $args['title'] ) . '</span>' . md_icon( 'angle-down', array( 'classes' => 'toc-trigger' ) ); ?></p>
 
 	<ol class="toc-list">
 
@@ -30,7 +29,7 @@
 				</li>
 				<?php endforeach; ?>
 
-				</ol>
+			</ol>
 
 			<?php endif; ?>
 

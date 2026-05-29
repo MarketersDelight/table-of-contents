@@ -4,7 +4,7 @@
 	$TABLE OF CONTENTS
 \*------------------------------*/
 
-.widget .toc:not(:last-child) { margin-block-end: <?php echo $single; ?>px; }
+.toc { background-color: <?php echo $colors['site']['accent']; ?>; }
 
 .toc .widget-title {
 	align-items: center;
@@ -16,7 +16,9 @@
 
 .toc ol { list-style: none; }
 
-.toc-list .toc-item { margin-block-end: 0; }
+.format .toc ol { margin-inline-start: 0; }
+
+.toc .widget-title, .toc-list .toc-item { margin-block-end: 0; }
 
 .toc-item-title {
 	align-items: center;
@@ -59,23 +61,38 @@
 .toc.open .widget-title .toc-trigger:before,
 .toc-item:is(.active, .child-active, .toggle-toc-item) .toc-trigger:before { content: '\e817'; }
 
+/* QUERIES */
+
 @media (min-width: 900px) {
+	.toc:not(:last-child) { margin-block-end: <?php echo $single; ?>px; }
 	.toc.stuck {
 		position: sticky;
 			inset-block-start: 0;
 			inset-inline: 0;
 	}
-	.header.stuck + .main .sidebar .toc.stuck { padding-block-start: <?php echo $triple; ?>px; }
-	.admin-bar .toc.stuck { padding-block-start: calc(var(--wp-admin--admin-bar--height) + <?php echo $single; ?>px); }
-	.admin-bar .header.stuck + .main .sidebar .toc.stuck { padding-block-start: calc(var(--wp-admin--admin-bar--height) + <?php echo $triple; ?>px); }
-	.sidebar .toc { background-color: <?php echo $colors['site']['bg_color']; ?>; }
-	.toc .widget-title .toc-trigger { display: none; }
 	.format .toc .toc-list { margin-inline-start: -<?php echo $half; ?>px; }
+	.sidebar .toc { background-color: <?php echo $colors['site']['bg_color']; ?>; }
+	.sidebar .toc.stuck { padding-block-start: <?php echo $single; ?>px; }
+	.sidebar .toc .widget-title { margin-block-end: <?php echo $half; ?>px; }
+	.sidebar .widget-title .toc-trigger { display: none; }
+	.header.stuck + .main .sidebar .toc.stuck { padding-block-start: <?php echo $triple; ?>px; }
+	.admin-bar .toc.stuck { padding-block-start: var(--wp-admin--admin-bar--height); }
+	.admin-bar .sidebar .toc.stuck { padding-block-start: calc(var(--wp-admin--admin-bar--height) + <?php echo $half; ?>px); }
+	.admin-bar .header.stuck + .main .sidebar .toc.stuck { padding-block-start: calc(var(--wp-admin--admin-bar--height) + <?php echo $triple; ?>px); }
+	/* ENTRY */
+	.entry .toc {
+		border-radius: 6px;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+	}
+	.entry .toc.stuck { margin-inline: -<?php echo $mid; ?>px; }
+	.entry .toc .widget-title, .entry .toc-list { padding: <?php echo $half; ?>px <?php echo $single; ?>px; }
+	.entry .toc.stuck .widget-title { cursor: pointer; }
+	.entry .toc:is(:not(.stuck), .stuck.open) .widget-title { border-block-end: 1px solid rgba(0, 0, 0, 0.1); }
+	.entry .toc:not(.stuck) .widget-title .toc-trigger, .entry .toc.stuck:not(.open) .toc-list { display: none; }
 }
 
 @media (max-width: 900px) {
 	.toc {
-		background-color: <?php echo $colors['site']['accent']; ?>;
 		border-block-start: 1px solid <?php echo $colors['site']['tertiary']; ?>;
 		position: fixed;
 			inset-block-end: 0;
@@ -84,13 +101,9 @@
 	}
 	.toc .widget-title {
 		cursor: pointer;
-		margin-block-end: 0;
 		padding: <?php echo $half; ?>px;
 	}
-	.toc.open .widget-title {
-		border-block-end: 1px solid <?php echo $colors['site']['tertiary']; ?>;
-		padding-block-end: <?php echo $half; ?>px;
-	}
+	.toc.open .widget-title { border-block-end: 1px solid <?php echo $colors['site']['tertiary']; ?>; }
 	.toc .toc-list {
 		display: none;
 		padding: <?php echo $half; ?>px;

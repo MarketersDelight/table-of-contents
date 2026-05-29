@@ -8,13 +8,8 @@
 
 function md_toc( $args = array() ) {
 	$args = wp_parse_args( $args, array(
-		'before_widget' => '',
-		'after_widget' => '',
-		'title' => '',
-		'before_title' => '<p class="toc-title">',
-		'after_title' => '</p>'
+		'title' => __( 'Table of Contents', 'md-toc' )
 	) );
-
     $layout = md_post_type_field( array( 'layout', 'toc' ) );
 
     if ( isset( $args['widget_id'] ) && ! empty( $layout['add'] ) )

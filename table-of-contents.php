@@ -20,7 +20,7 @@ class md_table_of_contents extends md_api {
 	public $slug = 'table-of-contents';
 
 	/**
-	 * Included used files by TOC.
+	 * Include additional files.
 	 *
 	 * @since 2.0
 	 */
@@ -43,6 +43,7 @@ class md_table_of_contents extends md_api {
 
 		add_filter( 'md_filter_sticky_elements', function( $elements ) {
 			$elements[] = '#table_of_contents';
+
 			return $elements;
 		} );
 	}
@@ -136,10 +137,10 @@ class md_table_of_contents extends md_api {
 
 	public function template() {
 		$this->headings = md_post_meta( array( $this->id, 'list' ) );
+		$enable = md_post_type_field( array( 'layout', 'toc', 'add' ) );
 
-		if ( is_singular() && ! empty( $this->headings ) ) {
-//			add_action( 'md_hook_before_the_content', 'md_toc' );
-//			add_filter( 'md_filter_content_box_classes', array( $this, 'content_box_classes' ) );
+		if ( is_singular() && $enable && ! empty( $this->headings ) ) {
+			add_action( 'md_hook_the_content_top', 'md_toc' );
 		}
 	}
 
@@ -183,27 +184,6 @@ class md_table_of_contents extends md_api {
 		}
 
 		return $table;
-	}
-
-	/**
-	 * Add layout classes to the content box based on TOC alignment setting.
-	 *
-	 * @since 1.0
-	 */
-
-	public function content_box_classes( $classes ) {
-		/*
-		$alignment = md_post_meta( array( 'table_of_contents', 'alignment' ) );
-
-		if ( empty( $alignment ) )
-			$alignment = md_setting( array( 'table_of_contents', 'alignment' ) );
-
-		if ( ! empty( $alignment ) )
-			$classes[] = esc_attr( "toc-$alignment" );
-
-		$classes[] = md_has_sidebar() ? 'toc-fixed' : 'toc-full';
-*/
-		return $classes;
 	}
 
 }
