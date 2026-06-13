@@ -53,7 +53,7 @@
 .toc-h5 .toc-item-label { padding-inline-start: <?php echo $half + ( $third * 4 ); ?>px; }
 .toc-h6 .toc-item-label { padding-inline-start: <?php echo $half + ( $third * 6); ?>px; }
 
-.toc-trigger { padding: <?php echo $small; ?>px <?php echo $half; ?>px; }
+.toc-item .toc-trigger { padding: <?php echo $small; ?>px <?php echo $half; ?>px; }
 
 .toc-sublist { display: none; }
 
@@ -70,7 +70,7 @@
 			inset-block-start: 0;
 			inset-inline: 0;
 	}
-	.format .toc .toc-list { margin-inline-start: -<?php echo $half; ?>px; }
+	.widget .toc .toc-list { margin-inline-start: -<?php echo $half; ?>px; }
 	.sidebar .toc { background-color: <?php echo $colors['site']['bg_color']; ?>; }
 	.sidebar .toc.stuck { padding-block-start: <?php echo $single; ?>px; }
 	.sidebar .toc .widget-title { margin-block-end: <?php echo $half; ?>px; }
@@ -85,10 +85,16 @@
 		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
 	}
 	.entry .toc.stuck { margin-inline: -<?php echo $mid; ?>px; }
-	.entry .toc .widget-title, .entry .toc-list { padding: <?php echo $half; ?>px <?php echo $single; ?>px; }
-	.entry .toc.stuck .widget-title { cursor: pointer; }
+	.entry .toc .widget-title { padding: <?php echo $half; ?>px <?php echo $single; ?>px; }
+	.entry .toc.stuck .widget-title {
+		cursor: pointer;
+		font-size: <?php echo $typography['h6']['font_size']['desktop'];?>px;
+		line-height: <?php echo $typography['h6']['line_height']['desktop'];?>px;
+		padding-block: <?php echo $small; ?>px;
+	}
 	.entry .toc:is(:not(.stuck), .stuck.open) .widget-title { border-block-end: 1px solid rgba(0, 0, 0, 0.1); }
 	.entry .toc:not(.stuck) .widget-title .toc-trigger, .entry .toc.stuck:not(.open) .toc-list { display: none; }
+	.entry .toc-list { padding: <?php echo $half; ?>px; }
 }
 
 @media (max-width: 900px) {

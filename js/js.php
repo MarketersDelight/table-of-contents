@@ -1,22 +1,26 @@
 <script>
 
 tableOfContents: function() {
+	var toc = document.getElementById( 'table_of_contents' );
+
+	if ( ! toc )
+		return;
+
 	var	content = document.getElementById( 'the_content' ),
-		toc = document.getElementById( 'table_of_contents' ),
 		labels = toc.querySelectorAll( '.toc-item-label' ),
 		headings = content.querySelectorAll( 'h2, h3, h4, h5, h6' );
 
 	function scrollTo( target ) {
 		var inEntry = !! toc.closest( '.entry' ),
-			simulate = inEntry && ! MD.hasClass( toc, 'stuck' );
+			preStuck = inEntry && ! MD.hasClass( toc, 'stuck' );
 
-		if ( simulate ) MD.addClass( toc, 'stuck' );
+		if ( preStuck ) MD.addClass( toc, 'stuck' );
 
 		var top = 0, el = target;
 		while ( el ) { top += el.offsetTop; el = el.offsetParent; }
 		var offset = inEntry ? toc.clientHeight : 0;
 
-		if ( simulate ) MD.removeClass( toc, 'stuck' );
+		if ( preStuck ) MD.removeClass( toc, 'stuck' );
 
 		window.scrollTo({ top: top - offset, behavior: 'smooth' });
 	}

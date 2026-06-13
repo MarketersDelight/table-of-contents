@@ -1,8 +1,9 @@
-<div id="table_of_contents" class="md-widget md-toggle md-sep-small">
+<div id="table_of_contents" class="md-widget md-toggle md-sep-micro">
 
 	<h3 class="md-widget-title"><?php echo md_text_field( $name ); ?></h3>
 
 	<div class="md-widget-item">
+
 		<div class="md-sep-small">
 			<?php $this->fields->field( 'headings', array(
 				'type' => 'checkbox',
@@ -12,6 +13,7 @@
 				'options' => $options
 			) ); ?>
 		</div>
+
 		<div class="md-sep-small">
 			<?php $this->fields->field( 'style', array(
 				'type' => 'checkbox',
@@ -31,6 +33,7 @@
 				)
 			) ); ?>
 		</div>
+
 		<div class="md-sep-small">
 			<?php $this->fields->field( 'start_position', array(
 				'type' => 'number',
@@ -40,6 +43,7 @@
 				'unit' => 'px'
 			) ); ?>
 		</div>
+
 	</div>
 
 </div>

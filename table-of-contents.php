@@ -40,12 +40,6 @@ class md_table_of_contents extends md_api {
 		$this->id = str_replace( '-', '_', $this->slug );
 
 		$this->admin_actions();
-
-		add_filter( 'md_filter_sticky_elements', function( $elements ) {
-			$elements[] = '#table_of_contents';
-
-			return $elements;
-		} );
 	}
 
 	/**
@@ -55,8 +49,6 @@ class md_table_of_contents extends md_api {
 	 */
 
 	private function admin_actions() {
-		add_action( 'save_post', array( $this, 'save_headings' ), 10, 2 );
-
 		add_action( 'md_hook_layout_admin_single_fields', function( $fields ) {
 			include md_template( 'dropins', "{$this->slug}/meta-box", true );
 		} );
@@ -126,7 +118,8 @@ class md_table_of_contents extends md_api {
 	 */
 
 	public function enqueue() {
-		wp_add_inline_script( 'marketers-delight', "MD.tableOfContents();" );
+		if ( is_singular() && ! empty( $this->headings ) )
+			wp_add_inline_script( 'marketers-delight', "MD.tableOfContents();" );
 	}
 
 	/**
@@ -137,10 +130,17 @@ class md_table_of_contents extends md_api {
 
 	public function template() {
 		$this->headings = md_post_meta( array( $this->id, 'list' ) );
+
 		$enable = md_post_type_field( array( 'layout', 'toc', 'add' ) );
 
 		if ( is_singular() && $enable && ! empty( $this->headings ) ) {
 			add_action( 'md_hook_the_content_top', 'md_toc' );
+
+			add_filter( 'md_filter_sticky_elements', function( $elements ) {
+				$elements[] = '#table_of_contents';
+
+				return $elements;
+			} );
 		}
 	}
 
@@ -150,11 +150,10 @@ class md_table_of_contents extends md_api {
 	 * @since 1.0
 	 */
 
-	public function save_headings( $post_id, $post ) {
-		$post_meta = md_post_meta();
-		$post_meta[$this->id]['list'] = $this->parse_headings( $post->post_content );
+	public function save_post_meta( $meta, $post ) {
+		$meta[$this->id]['list'] = $this->parse_headings( $post->post_content );
 
-		update_post_meta( $post_id, 'marketers_delight', $post_meta );
+		return $meta;
 	}
 
 	/**
