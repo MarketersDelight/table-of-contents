@@ -12,12 +12,14 @@ for ( var i = 0; i < headings.length; i++ )
 	if ( headings[i].offsetTop + contentBoxOffsetTop <= pos + 20 )
 		active = i;
 
-for ( var c = 0; c < tocItems.length; c++ )
-	MD.removeClass( tocItems[c], 'active child-active' );
+for ( var c = 0; c < tocItems.length; c++ ) {
+	tocItems[c].classList.remove( 'active' );
+	tocItems[c].classList.remove( 'child-active' );
+}
 
 if ( active >= 0 && tocItems[active] ) {
-	MD.addClass( tocItems[active], 'active' );
+	tocItems[active].classList.add( 'active' );
 
-	if ( MD.hasClass( tocItems[active].parentNode, 'toc-sublist' ) )
-		MD.addClass( tocItems[active].parentNode.parentNode, 'child-active' );
+	if ( tocItems[active].parentNode.classList.contains( 'toc-sublist' ) )
+		tocItems[active].parentNode.parentNode.classList.add( 'child-active' );
 }

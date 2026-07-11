@@ -4,12 +4,12 @@
 	$TABLE OF CONTENTS
 \*------------------------------*/
 
-.toc { background-color: <?php echo $colors['site']['accent']; ?>; }
+.toc { background-color: var(--md-color-tertiary); }
 
 .toc .widget-title {
 	align-items: center;
 	display: flex;
-	gap: <?php echo $third; ?>px;
+	gap: var(--md-third);
 }
 
 .toc .widget-title-label { flex: 1; }
@@ -28,32 +28,32 @@
 
 .toc-item-title:hover {
 	background-color: rgba(0, 0, 0, 0.05);
-	border-radius: 6px;
+	border-radius: var(--md-border-radius);
 }
 
 .toc-item-label {
 	border-inline-start: 3px solid transparent;
 	display: block;
 	flex: 1;
-	padding: <?php echo $small; ?>px <?php echo $half; ?>px;
+	padding: var(--md-small) var(--md-half);
 	transition: 0.2s;
 }
 
-.toc-item-title:hover .toc-item-label { border-radius: 6px 0 0 6px; }
+.toc-item-title:hover .toc-item-label { border-radius: var(--md-border-radius) 0 0 var(--md-border-radius); }
 
 .active > .toc-item-title .toc-item-label {
-	border-color: <?php echo $colors['site']['primary']; ?>;
-	color: <?php echo $colors['site']['primary']; ?>;
-	font-weight: <?php echo $bold; ?>;
+	border-color: var(--md-color-primary);
+	color: var(--md-color-primary);
+	font-weight: var(--md-bold);
 	text-decoration: none;
 }
 
-.toc-h3 .toc-item-label { padding-inline-start: <?php echo $half + $third; ?>px; }
-.toc-h4 .toc-item-label { padding-inline-start: <?php echo $half + ( $third * 2 ); ?>px; }
-.toc-h5 .toc-item-label { padding-inline-start: <?php echo $half + ( $third * 4 ); ?>px; }
-.toc-h6 .toc-item-label { padding-inline-start: <?php echo $half + ( $third * 6); ?>px; }
+.toc-h3 .toc-item-label { padding-inline-start: calc(var(--md-half) + var(--md-third)); }
+.toc-h4 .toc-item-label { padding-inline-start: calc(var(--md-half) + var(--md-third) * 2); }
+.toc-h5 .toc-item-label { padding-inline-start: calc(var(--md-half) + var(--md-third) * 4); }
+.toc-h6 .toc-item-label { padding-inline-start: calc(var(--md-half) + var(--md-third) * 6); }
 
-.toc-item .toc-trigger { padding: <?php echo $small; ?>px <?php echo $half; ?>px; }
+.toc-item .toc-trigger { padding: var(--md-small) var(--md-half); }
 
 .toc-sublist { display: none; }
 
@@ -64,55 +64,55 @@
 /* QUERIES */
 
 @media (min-width: 900px) {
-	.toc:not(:last-child) { margin-block-end: <?php echo $single; ?>px; }
+	.toc:not(:last-child) { margin-block-end: var(--md-single); }
 	.toc.stuck {
 		position: sticky;
 			inset-block-start: 0;
 			inset-inline: 0;
 	}
-	.widget .toc .toc-list { margin-inline-start: -<?php echo $half; ?>px; }
-	.sidebar .toc { background-color: <?php echo $colors['site']['bg_color']; ?>; }
-	.sidebar .toc.stuck { padding-block-start: <?php echo $single; ?>px; }
-	.sidebar .toc .widget-title { margin-block-end: <?php echo $half; ?>px; }
+	.widget .toc .toc-list { margin-inline-start: calc(-1 * var(--md-half)); }
+	.sidebar .toc { background-color: var(--md-color-background); }
+	.sidebar .toc.stuck { padding-block-start: var(--md-single); }
+	.sidebar .toc .widget-title { margin-block-end: var(--md-half); }
 	.sidebar .widget-title .toc-trigger { display: none; }
-	.header.stuck + .main .sidebar .toc.stuck { padding-block-start: <?php echo $triple; ?>px; }
+	.header.stuck + .main .sidebar .toc.stuck { padding-block-start: var(--md-triple); }
 	.admin-bar .toc.stuck { padding-block-start: var(--wp-admin--admin-bar--height); }
-	.admin-bar .sidebar .toc.stuck { padding-block-start: calc(var(--wp-admin--admin-bar--height) + <?php echo $half; ?>px); }
-	.admin-bar .header.stuck + .main .sidebar .toc.stuck { padding-block-start: calc(var(--wp-admin--admin-bar--height) + <?php echo $triple; ?>px); }
+	.admin-bar .sidebar .toc.stuck { padding-block-start: calc(var(--wp-admin--admin-bar--height) + var(--md-half)); }
+	.admin-bar .header.stuck + .main .sidebar .toc.stuck { padding-block-start: calc(var(--wp-admin--admin-bar--height) + var(--md-triple)); }
 	/* ENTRY */
 	.entry .toc {
-		border-radius: 6px;
-		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+		border-radius: var(--md-border-radius);
+		box-shadow: var(--md-box-shadow);
 	}
-	.entry .toc.stuck { margin-inline: -<?php echo $mid; ?>px; }
-	.entry .toc .widget-title { padding: <?php echo $half; ?>px <?php echo $single; ?>px; }
+	.entry .toc.stuck { margin-inline: calc(-1 * var(--md-mid)); }
+	.entry .toc .widget-title { padding: var(--md-half) var(--md-single); }
 	.entry .toc.stuck .widget-title {
 		cursor: pointer;
-		font-size: <?php echo $typography['h6']['font_size']['desktop'];?>px;
-		line-height: <?php echo $typography['h6']['line_height']['desktop'];?>px;
-		padding-block: <?php echo $small; ?>px;
+		font-size: var(--md-h6);
+		line-height: var(--md-h6-line-height);
+		padding-block: var(--md-small);
 	}
-	.entry .toc:is(:not(.stuck), .stuck.open) .widget-title { border-block-end: 1px solid rgba(0, 0, 0, 0.1); }
+	.entry .toc:is(:not(.stuck), .stuck.open) .widget-title { border-block-end: 1px solid var(--md-content-border); }
 	.entry .toc:not(.stuck) .widget-title .toc-trigger, .entry .toc.stuck:not(.open) .toc-list { display: none; }
-	.entry .toc-list { padding: <?php echo $half; ?>px; }
+	.entry .toc-list { padding: var(--md-half); }
 }
 
 @media (max-width: 900px) {
 	.toc {
-		border-block-start: 1px solid <?php echo $colors['site']['tertiary']; ?>;
+		border-block-start: 1px solid var(--md-content-border);
 		position: fixed;
 			inset-block-end: 0;
 			inset-inline: 0;
-		z-index: 85;
+		z-index: 82;
 	}
 	.toc .widget-title {
 		cursor: pointer;
-		padding: <?php echo $half; ?>px;
+		padding: var(--md-half);
 	}
-	.toc.open .widget-title { border-block-end: 1px solid <?php echo $colors['site']['tertiary']; ?>; }
+	.toc.open .widget-title { border-block-end: 1px solid var(--md-content-border); }
 	.toc .toc-list {
 		display: none;
-		padding: <?php echo $half; ?>px;
+		padding: var(--md-half);
 	}
 	.toc.open .toc-list { display: block; }
 }

@@ -12,15 +12,15 @@ tableOfContents: function() {
 
 	function scrollTo( target ) {
 		var inEntry = !! toc.closest( '.entry' ),
-			preStuck = inEntry && ! MD.hasClass( toc, 'stuck' );
+			preStuck = inEntry && ! toc.classList.contains( 'stuck' );
 
-		if ( preStuck ) MD.addClass( toc, 'stuck' );
+		if ( preStuck ) toc.classList.add( 'stuck' );
 
 		var top = 0, el = target;
 		while ( el ) { top += el.offsetTop; el = el.offsetParent; }
 		var offset = inEntry ? toc.clientHeight : 0;
 
-		if ( preStuck ) MD.removeClass( toc, 'stuck' );
+		if ( preStuck ) toc.classList.remove( 'stuck' );
 
 		window.scrollTo({ top: top - offset, behavior: 'smooth' });
 	}
@@ -35,12 +35,12 @@ tableOfContents: function() {
 		var id = label.getAttribute( 'href' ).slice( 1 ),
 			target = document.getElementById( id );
 		if ( ! target ) return;
-		MD.removeClass( toc, 'open' );
+		toc.classList.remove( 'open' );
 		scrollTo( target );
 		window.history.pushState( {}, '', '#' + id );
 	} );
 
-	toc.querySelector( '.widget-title' ).onclick = function() { MD.toggleClass( toc, 'open' ); };
+	toc.querySelector( '.widget-title' ).onclick = function() { toc.classList.toggle( 'open' ); };
 
 	if ( 'scrollRestoration' in history )
 		history.scrollRestoration = 'manual';
