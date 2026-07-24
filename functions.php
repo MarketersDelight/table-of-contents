@@ -10,15 +10,19 @@ function md_toc( $args = array() ) {
 	$args = wp_parse_args( $args, array(
 		'title' => __( 'Table of Contents', 'md-toc' )
 	) );
-    $layout = md_post_type_field( array( 'layout', 'toc' ) );
+	$classes = array( 'toc' );
 
-    if ( isset( $args['widget_id'] ) && ! empty( $layout['add'] ) )
-         return;
+	if ( isset( $args['widget_id'] ) && md_module( array( 'layout', 'toc', 'add' ) ) )
+		return;
 
-    $headings = md_post_meta( array( 'table_of_contents', 'list' ) );
+	if ( isset( $args['widget_id'] ) || md_module( array( 'layout', 'toc', 'sticky' ) ) )
+		$classes[] = 'sticky';
+
+	$classes = join( ' ', $classes );
+	$headings = md_post_meta( array( 'table_of_contents', 'list' ) );
 
 	if ( empty( $headings ) )
-        return;
+		return;
 
 	$current = null;
 	$groups = array();

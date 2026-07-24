@@ -1,4 +1,4 @@
-<nav id="table_of_contents" class="toc" aria-label="<?php echo __( 'Table of contents', 'md-toc' ); ?>">
+<nav id="table_of_contents" class="<?php echo esc_attr( $classes ); ?>" aria-label="<?php echo __( 'Table of contents', 'md-toc' ); ?>">
 
 	<p class="widget-title"><?php echo md_icon( 'book' ) . '<span class="widget-title-label">' . esc_html( $args['title'] ) . '</span>' . md_icon( 'angle-down', array( 'classes' => 'toc-trigger' ) ); ?></p>
 

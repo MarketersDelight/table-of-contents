@@ -75,10 +75,10 @@
 	.sidebar .toc.stuck { padding-block-start: var(--md-single); }
 	.sidebar .toc .widget-title { margin-block-end: var(--md-half); }
 	.sidebar .widget-title .toc-trigger { display: none; }
-	.header.stuck + .main .sidebar .toc.stuck { padding-block-start: var(--md-triple); }
+	.header.sticky + .main .sidebar .toc.stuck { padding-block-start: var(--md-triple); }
 	.admin-bar .toc.stuck { padding-block-start: var(--wp-admin--admin-bar--height); }
 	.admin-bar .sidebar .toc.stuck { padding-block-start: calc(var(--wp-admin--admin-bar--height) + var(--md-half)); }
-	.admin-bar .header.stuck + .main .sidebar .toc.stuck { padding-block-start: calc(var(--wp-admin--admin-bar--height) + var(--md-triple)); }
+	.admin-bar .header.sticky + .main .sidebar .toc.stuck { padding-block-start: calc(var(--wp-admin--admin-bar--height) + var(--md-triple)); }
 	/* ENTRY */
 	.entry .toc {
 		border-radius: var(--md-border-radius);

@@ -131,17 +131,13 @@ class md_table_of_contents extends md_api {
 	public function template() {
 		$this->headings = md_post_meta( array( $this->id, 'list' ) );
 
-		$enable = md_post_type_field( array( 'layout', 'toc', 'add' ) );
+		if ( ! is_singular() || empty( $this->headings ) )
+			return;
 
-		if ( is_singular() && $enable && ! empty( $this->headings ) ) {
+		$enable = md_module( array( 'layout', 'toc', 'add' ) );
+
+		if ( $enable )
 			add_action( 'md_hook_the_content_top', 'md_toc' );
-
-			add_filter( 'md_filter_sticky_elements', function( $elements ) {
-				$elements[] = '#table_of_contents';
-
-				return $elements;
-			} );
-		}
 	}
 
 	/**

@@ -10,6 +10,16 @@ tableOfContents: function() {
 		labels = toc.querySelectorAll( '.toc-item-label' ),
 		headings = content.querySelectorAll( 'h2, h3, h4, h5, h6' );
 
+	if ( toc.classList.contains( 'sticky' ) ) {
+		var threshold = toc.getBoundingClientRect().top + window.scrollY;
+		var updateSticky = function() {
+			toc.classList.toggle( 'stuck', window.scrollY >= threshold );
+		};
+
+		updateSticky();
+		window.addEventListener( 'scroll', updateSticky, { passive: true } );
+	}
+
 	function scrollTo( target ) {
 		var inEntry = !! toc.closest( '.entry' ),
 			preStuck = inEntry && ! toc.classList.contains( 'stuck' );
