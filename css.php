@@ -4,7 +4,7 @@
 	$TABLE OF CONTENTS
 \*------------------------------*/
 
-.toc { background-color: var(--md-color-tertiary); }
+.toc { background-color: var(--md-content-main-background); }
 
 .toc .widget-title {
 	align-items: center;
@@ -42,8 +42,8 @@
 .toc-item-title:hover .toc-item-label { border-radius: var(--md-border-radius) 0 0 var(--md-border-radius); }
 
 .active > .toc-item-title .toc-item-label {
-	border-color: var(--md-color-primary);
-	color: var(--md-color-primary);
+	border-color: var(--md-site-links);
+	color: var(--md-site-links);
 	font-weight: var(--md-bold);
 	text-decoration: none;
 }
@@ -71,7 +71,7 @@
 			inset-inline: 0;
 	}
 	.widget .toc .toc-list { margin-inline-start: calc(-1 * var(--md-half)); }
-	.sidebar .toc { background-color: var(--md-color-background); }
+	.sidebar .toc { background-color: var(--md-sidebar-background); }
 	.sidebar .toc.stuck { padding-block-start: var(--md-single); }
 	.sidebar .toc .widget-title { margin-block-end: var(--md-half); }
 	.sidebar .widget-title .toc-trigger { display: none; }
