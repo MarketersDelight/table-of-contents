@@ -28,12 +28,19 @@ class md_table_of_contents_widget extends WP_Widget {
 
 	public function widget( $args, $val ) {
 		if ( ! is_singular() )
-            return;
+			return;
 
-        if ( ! empty( $val['title'] ) )
-            $args['title'] = $val['title'];
+		$render = array( 'context' => 'widget' );
 
-        md_toc( $args );
+		if ( ! empty( $val['title'] ) )
+			$render['title'] = $val['title'];
+
+		$toc = md_get_toc( $render );
+
+		if ( empty( $toc ) )
+			return;
+
+		echo $args['before_widget'] . $toc . $args['after_widget'];
 	}
 
 	/**
@@ -43,7 +50,7 @@ class md_table_of_contents_widget extends WP_Widget {
 	 */
 
 	public function update( $new, $val ) {
-        $val['title'] = esc_html( $new['title'] );
+		$val['title'] = sanitize_text_field( $new['title'] );
 
 		return $val;
 	}

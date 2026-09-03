@@ -17,6 +17,8 @@ class md_table_of_contents extends md_api {
 	public $id;
 	public $name;
 	private $headings;
+	private $context = 'inline';
+	private $position = 'gutter-left';
 	public $slug = 'table-of-contents';
 
 	/**
@@ -58,12 +60,12 @@ class md_table_of_contents extends md_api {
 				'type' => 'checkbox',
 				'options' => array( 'add', 'sticky' )
 			);
-			$fields['toc_align'] = array(
+			$fields['toc_position'] = array(
 				'type' => 'select',
-				'options' => array( 'left', 'right' )
+				'options' => array( 'gutter-left', 'gutter-right', 'inline' )
 			);
 			return $fields;
-		});
+		} );
 	}
 
 	/**
@@ -136,8 +138,50 @@ class md_table_of_contents extends md_api {
 
 		$enable = md_module( array( 'layout', 'toc', 'add' ) );
 
-		if ( $enable )
-			add_action( 'md_hook_the_content_top', 'md_toc' );
+		if ( ! $enable )
+			return;
+
+		$positions = array( 'gutter-left', 'gutter-right', 'inline' );
+		$position = md_module( array( 'layout', 'toc_position' ), 'gutter-left' );
+		$this->position = in_array( $position, $positions, true ) ? $position : 'gutter-left';
+		$can_use_gutter = ! md_has_sidebar() && ! md_has_builder();
+		$this->context = $can_use_gutter && $this->position !== 'inline' ? 'gutter' : 'inline';
+
+		add_action( 'md_hook_the_content_top', array( $this, 'render' ) );
+
+		if ( $this->context === 'gutter' || $this->position === 'inline' )
+			add_filter( 'md_filter_content_box_classes', array( $this, 'content_box_classes' ) );
+	}
+
+	/**
+	 * Render the automatically placed Table of Contents.
+	 *
+	 * @since 2.0
+	 */
+
+	public function render() {
+		md_toc( array(
+			'context' => $this->context,
+			'floating' => $this->context === 'inline',
+			'title' => $this->context === 'gutter' ? __( 'On this page', 'md-toc' ) : $this->name
+		) );
+	}
+
+	/**
+	 * Add automatic TOC position details to the content box.
+	 *
+	 * @since 2.0
+	 */
+
+	public function content_box_classes( $classes ) {
+		if ( $this->context === 'gutter' ) {
+			$classes[] = 'has-toc-gutter';
+			$classes[] = "toc-{$this->position}";
+		}
+		elseif ( $this->context === 'inline' )
+			$classes[] = 'has-toc-float';
+
+		return $classes;
 	}
 
 	/**

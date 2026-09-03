@@ -1,66 +1,204 @@
 <script>
 
 tableOfContents: function() {
-	var toc = document.getElementById( 'table_of_contents' );
+	var toc = document.querySelector( '.toc' );
 
 	if ( ! toc )
 		return;
 
-	var	content = document.getElementById( 'the_content' ),
-		labels = toc.querySelectorAll( '.toc-item-label' ),
-		headings = content.querySelectorAll( 'h2, h3, h4, h5, h6' );
+	var content = document.getElementById( 'the_content' ),
+		main = document.getElementById( 'main' ),
+		headings = Array.from( content.querySelectorAll( 'h2, h3, h4, h5, h6' ) ),
+		items = Array.from( toc.querySelectorAll( '.toc-item' ) ),
+		links = Array.from( toc.querySelectorAll( '.toc-item-label' ) ),
+		toggle = toc.querySelector( '.toc-toggle' ),
+		floatingToc = toc.classList.contains( 'toc-float' ) && toc.classList.contains( 'toc-sticky' ) ? toc : null,
+		desktop = window.matchMedia( '(min-width: 900px)' ),
+		activeIndex = -1,
+		selectedIndex = null,
+		floatingAnchor,
+		floatingTitle;
 
-	if ( toc.classList.contains( 'sticky' ) ) {
-		var threshold = toc.getBoundingClientRect().top + window.scrollY;
-		var updateSticky = function() {
-			toc.classList.toggle( 'stuck', window.scrollY >= threshold );
-		};
-
-		updateSticky();
-		window.addEventListener( 'scroll', updateSticky, { passive: true } );
+	function setOpen( isOpen ) {
+		toc.classList.toggle( 'open', isOpen );
+		toggle.setAttribute( 'aria-expanded', isOpen );
 	}
 
-	function scrollTo( target ) {
-		var inEntry = !! toc.closest( '.entry' ),
-			preStuck = inEntry && ! toc.classList.contains( 'stuck' );
+	function toggleActiveItem( index, isActive ) {
+		if ( index < 0 )
+			return;
 
-		if ( preStuck ) toc.classList.add( 'stuck' );
+		var item = items[index];
 
-		var top = 0, el = target;
-		while ( el ) { top += el.offsetTop; el = el.offsetParent; }
-		var offset = inEntry ? toc.clientHeight : 0;
+		item.classList.toggle( 'active', isActive );
 
-		if ( preStuck ) toc.classList.remove( 'stuck' );
+		if ( ! item.parentNode.classList.contains( 'toc-sublist' ) )
+			return;
 
-		window.scrollTo({ top: top - offset, behavior: 'smooth' });
+		var parent = item.parentNode.parentNode,
+			parentToggle = parent.querySelector( '.toc-item-toggle' );
+
+		parent.classList.toggle( 'child-active', isActive );
+		parentToggle.setAttribute( 'aria-expanded', isActive || parent.classList.contains( 'toggle-toc-item' ) );
 	}
 
-	for ( var i = 0; i < labels.length; i++ )
-		headings[i].setAttribute( 'id', labels[i].getAttribute( 'href' ).slice( 1 ) );
+	function setActiveItem( index ) {
+		if ( activeIndex === index )
+			return;
 
-	toc.addEventListener( 'click', function( e ) {
-		var label = e.target.closest( '.toc-item-label' );
-		if ( ! label ) return;
-		e.preventDefault();
-		var id = label.getAttribute( 'href' ).slice( 1 ),
-			target = document.getElementById( id );
-		if ( ! target ) return;
-		toc.classList.remove( 'open' );
-		scrollTo( target );
-		window.history.pushState( {}, '', '#' + id );
-	} );
+		toggleActiveItem( activeIndex, false );
+		activeIndex = index;
+		toggleActiveItem( activeIndex, true );
+	}
 
-	toc.querySelector( '.widget-title' ).onclick = function() { toc.classList.toggle( 'open' ); };
+	function updateFloatingState( scrollY, stickyOffset ) {
+		if ( ! floatingToc )
+			return 0;
 
-	if ( 'scrollRestoration' in history )
-		history.scrollRestoration = 'manual';
+		var threshold = floatingAnchor.getBoundingClientRect().top + scrollY,
+			isStuck = desktop.matches && scrollY + stickyOffset >= threshold,
+			floatingHeight = isStuck ? floatingTitle.offsetHeight : 0;
 
-	window.addEventListener( 'popstate', function() {
-		var hash = window.location.hash;
-		if ( hash ) {
-			var target = document.getElementById( hash.slice( 1 ) );
-			if ( target ) scrollTo( target );
+		floatingToc.classList.toggle( 'stuck', isStuck );
+		main.style.setProperty( '--toc-floating-height', floatingHeight + 'px' );
+
+		if ( ! isStuck )
+			setOpen( false );
+
+		return floatingHeight;
+	}
+
+	function update( scrollY ) {
+		var styles = window.getComputedStyle( main ),
+			stickyOffset = parseFloat( styles.getPropertyValue( '--toc-sticky-offset' ) ),
+			floatingHeight = updateFloatingState( scrollY, stickyOffset ),
+			scrollGap = parseFloat( styles.getPropertyValue( '--toc-scroll-gap' ) ),
+			headingOffset = stickyOffset + floatingHeight + scrollGap,
+			nextActiveIndex = -1;
+
+		for ( var i = 0; i < headings.length; i++ ) {
+			if ( headings[i].getBoundingClientRect().top > headingOffset )
+				break;
+
+			nextActiveIndex = i;
 		}
-		else window.scrollTo({ top: 0, behavior: 'smooth' });
+
+		var pageHeight = Math.max( document.body.scrollHeight, document.documentElement.scrollHeight ),
+			atPageEnd = Math.ceil( scrollY + window.innerHeight ) >= pageHeight;
+
+		if ( atPageEnd )
+			nextActiveIndex = headings.length - 1;
+
+		setActiveItem( selectedIndex === null ? nextActiveIndex : selectedIndex );
+	}
+
+	var usedIds = {};
+
+	for ( var i = 0; i < headings.length; i++ ) {
+		var baseId = headings[i].id || links[i].getAttribute( 'href' ).slice( 1 ) || 'section-' + ( i + 1 ),
+			headingId = baseId,
+			suffix = 2;
+
+		while ( usedIds[headingId] )
+			headingId = baseId + '-' + suffix++;
+
+		usedIds[headingId] = true;
+		headings[i].id = headingId;
+		links[i].setAttribute( 'href', '#' + headingId );
+		headings[i].classList.add( 'toc-heading' );
+	}
+
+	if ( floatingToc ) {
+		floatingAnchor = document.createElement( 'span' );
+		floatingAnchor.className = 'toc-float-anchor';
+		floatingAnchor.setAttribute( 'aria-hidden', 'true' );
+		floatingToc.parentNode.insertBefore( floatingAnchor, floatingToc );
+		floatingTitle = floatingToc.querySelector( '.widget-title' );
+	}
+
+	toc.addEventListener( 'click', function( event ) {
+		var itemToggle = event.target.closest( '.toc-item-toggle' ),
+			link = event.target.closest( '.toc-item-label' );
+
+		if ( event.target.closest( '.toc-toggle' ) )
+			setOpen( ! toc.classList.contains( 'open' ) );
+
+		else if ( itemToggle ) {
+			var item = itemToggle.closest( '.toc-item' ),
+				isOpen = item.classList.toggle( 'toggle-toc-item' );
+
+			itemToggle.setAttribute( 'aria-expanded', isOpen || item.classList.contains( 'child-active' ) );
+		}
+
+		else if ( link ) {
+			event.preventDefault();
+
+			var target = document.getElementById( link.getAttribute( 'href' ).slice( 1 ) );
+
+			selectedIndex = headings.indexOf( target );
+			setOpen( false );
+			setActiveItem( selectedIndex );
+			target.scrollIntoView( { behavior: 'smooth', block: 'start' } );
+			window.history.pushState( {}, '', '#' + target.id );
+		}
 	} );
+
+	function clearSelectedItem() {
+		selectedIndex = null;
+	}
+
+	window.addEventListener( 'wheel', clearSelectedItem, { passive: true } );
+	window.addEventListener( 'touchmove', clearSelectedItem, { passive: true } );
+	window.addEventListener( 'keydown', function( event ) {
+		var scrollKeys = [ 'ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' ' ];
+
+		if ( scrollKeys.indexOf( event.key ) !== -1 )
+			clearSelectedItem();
+	} );
+	window.addEventListener( 'popstate', clearSelectedItem );
+
+	function updateStickyOffset() {
+		var rootStyles = window.getComputedStyle( document.documentElement ),
+			header = document.querySelector( '.header.sticky' ),
+			adminBar = document.getElementById( 'wpadminbar' ),
+			offset = parseFloat( rootStyles.getPropertyValue( '--md-half' ) );
+
+		if ( header )
+			offset += header.offsetHeight;
+
+		if ( adminBar )
+			offset += adminBar.offsetHeight;
+
+		main.style.setProperty( '--toc-sticky-offset', offset + 'px' );
+		update( window.scrollY );
+	}
+
+	// Repeat the browser's initial hash jump after sticky measurements are ready.
+	function scrollToCurrentHeading() {
+		if ( ! window.location.hash )
+			return;
+
+		var target = document.getElementById( window.location.hash.slice( 1 ) ),
+			targetIndex = headings.indexOf( target );
+
+		if ( targetIndex === -1 )
+			return;
+
+		selectedIndex = targetIndex;
+
+		window.requestAnimationFrame( function() {
+			target.scrollIntoView( { block: 'start' } );
+			update( window.scrollY );
+		} );
+	}
+
+	this.toc = { update: update };
+
+	updateStickyOffset();
+	scrollToCurrentHeading();
+	window.addEventListener( 'load', function() {
+		updateStickyOffset();
+		scrollToCurrentHeading();
+	} );
+	window.addEventListener( 'resize', updateStickyOffset );
 },

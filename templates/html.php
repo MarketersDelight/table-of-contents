@@ -1,42 +1,53 @@
-<nav id="table_of_contents" class="<?php echo esc_attr( $classes ); ?>" aria-label="<?php echo __( 'Table of contents', 'md-toc' ); ?>">
+<nav id="<?php echo esc_attr( $toc_id ); ?>" class="<?php echo esc_attr( $classes ); ?>" aria-labelledby="<?php echo esc_attr( $title_id ); ?>">
 
-	<p class="widget-title"><?php echo md_icon( 'book' ) . '<span class="widget-title-label">' . esc_html( $args['title'] ) . '</span>' . md_icon( 'angle-down', array( 'classes' => 'toc-trigger' ) ); ?></p>
+	<div class="toc-inner">
 
-	<ol class="toc-list">
+		<div class="widget-title">
+			<?php echo md_icon( 'book' ); ?>
+			<span id="<?php echo esc_attr( $title_id ); ?>" class="widget-title-label"><?php echo esc_html( $args['title'] ); ?></span>
+			<button class="toc-toggle" type="button" aria-expanded="false" aria-controls="<?php echo esc_attr( $list_id ); ?>" aria-label="<?php echo esc_attr__( 'Toggle table of contents', 'md-toc' ); ?>">
+				<?php echo md_icon( 'angle-down', array( 'classes' => 'toc-trigger' ) ); ?>
+			</button>
+		</div>
 
-		<?php foreach ( $groups as $fields ) : ?>
+		<ol id="<?php echo esc_attr( $list_id ); ?>" class="toc-list">
 
-		<li class="toc-item toc-<?php echo esc_attr( $fields['tag'] ); ?>">
+			<?php foreach ( $groups as $order => $fields ) : ?>
 
-			<div class="toc-item-title">
-				<a class="toc-item-label" href="#<?php echo esc_attr( $fields['id'] ); ?>"><?php echo esc_html( $fields['text'] ); ?></a>
+			<li class="toc-item toc-<?php echo esc_attr( $fields['tag'] ); ?>">
+
+				<div class="toc-item-title">
+					<a class="toc-item-label" href="#<?php echo esc_attr( $fields['id'] ); ?>"><?php echo esc_html( $fields['text'] ); ?></a>
+					<?php if ( ! empty( $fields['children'] ) ) : ?>
+					<?php $sublist_id = $toc_id . '_sublist_' . $order; ?>
+					<button class="toc-item-toggle" type="button" aria-expanded="false" aria-controls="<?php echo esc_attr( $sublist_id ); ?>" aria-label="<?php echo esc_attr__( 'Toggle section headings', 'md-toc' ); ?>">
+						<?php echo md_icon( 'angle-down', array( 'classes' => 'toc-trigger' ) ); ?>
+					</button>
+					<?php endif; ?>
+				</div>
+
 				<?php if ( ! empty( $fields['children'] ) ) : ?>
-				<span class="toggle trigger" data-toggle="toc-item">
-					<?php echo md_icon( 'angle-down', array( 'classes' => 'toc-trigger' ) ); ?>
-				</span>
+
+				<ol id="<?php echo esc_attr( $sublist_id ); ?>" class="toc-sublist">
+
+					<?php foreach ( $fields['children'] as $child ) : ?>
+					<li class="toc-item toc-<?php echo esc_attr( $child['tag'] ); ?>">
+						<div class="toc-item-title">
+							<a class="toc-item-label" href="#<?php echo esc_attr( $child['id'] ); ?>"><?php echo esc_html( $child['text'] ); ?></a>
+						</div>
+					</li>
+					<?php endforeach; ?>
+
+				</ol>
+
 				<?php endif; ?>
-			</div>
 
-			<?php if ( ! empty( $fields['children'] ) ) : ?>
+			</li>
 
-			<ol class="toc-sublist">
+			<?php endforeach; ?>
 
-				<?php foreach ( $fields['children'] as $child ) : ?>
-				<li class="toc-item toc-<?php echo esc_attr( $child['tag'] ); ?>">
-					<div class="toc-item-title">
-						<a class="toc-item-label" href="#<?php echo esc_attr( $child['id'] ); ?>"><?php echo esc_html( $child['text'] ); ?></a>
-					</div>
-				</li>
-				<?php endforeach; ?>
+		</ol>
 
-			</ol>
-
-			<?php endif; ?>
-
-		</li>
-
-		<?php endforeach; ?>
-
-	</ol>
+	</div>
 
 </nav>

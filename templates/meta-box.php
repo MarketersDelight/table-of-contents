@@ -20,4 +20,15 @@ $fields->field( 'toc', array(
 	)
 ) );
 
+$fields->field( 'toc_position', array(
+	'type' => 'select',
+	'label' => __( 'Placement', 'md-toc' ),
+	'description' => __( 'Gutter positions apply to expanded layouts without a sidebar. Other layouts display the table of contents at the top of the post.', 'md-toc' ),
+	'options' => array(
+		'gutter-left' => __( 'Left gutter', 'md-toc' ),
+		'gutter-right' => __( 'Right gutter', 'md-toc' ),
+		'inline' => __( 'Top of post', 'md-toc' )
+	)
+) );
+
 echo '</div></div>';
