@@ -7,13 +7,17 @@
 
 class md_table_of_contents_widget extends WP_Widget {
 
+	private $table_of_contents;
+
 	/**
 	 * Create widget attributes and fire any needed actions.
 	 *
 	 * @since 2.0
 	 */
 
-	public function __construct() {
+	public function __construct( $table_of_contents ) {
+		$this->table_of_contents = $table_of_contents;
+
 		parent::__construct( 'md_table_of_contents_widget', __( 'MD &rarr; Table of Contents', 'md' ), array(
 			'description' => __( 'Show a table of contents for the currently viewed post.', 'md' ),
 			'customize_selective_refresh' => true
@@ -30,17 +34,16 @@ class md_table_of_contents_widget extends WP_Widget {
 		if ( ! is_singular() )
 			return;
 
-		$render = array( 'context' => 'widget' );
+		$render = array(
+			'context' => 'widget',
+			'before' => $args['before_widget'],
+			'after' => $args['after_widget']
+		);
 
 		if ( ! empty( $val['title'] ) )
 			$render['title'] = $val['title'];
 
-		$toc = md_get_toc( $render );
-
-		if ( empty( $toc ) )
-			return;
-
-		echo $args['before_widget'] . $toc . $args['after_widget'];
+		$this->table_of_contents->html( $render );
 	}
 
 	/**

@@ -4,10 +4,8 @@
 	$TABLE OF CONTENTS
 \*------------------------------*/
 
-/* OFFSETS */
-
 .main {
-	--toc-floating-height: 0px;
+	--toc-floating-height: 0;
 	--toc-scroll-gap: var(--md-small);
 	--toc-sticky-offset: var(--md-half);
 }
@@ -148,9 +146,10 @@
 		overflow-y: auto;
 		position: sticky;
 			inset-block-start: var(--toc-sticky-offset);
-		z-index: 20;
+		z-index: 60;
 	}
 	.toc.stuck { margin-inline: calc(-1 * var(--md-mid)); }
+	.compact .toc.stuck { inset-block-start: calc(var(--toc-sticky-offset) - var(--md-half)); }
 	.toc.stuck .widget-title {
 		cursor: pointer;
 		font-size: var(--md-h6);
@@ -162,9 +161,7 @@
 	.toc.stuck:not(.open) .toc-list { display: none; }
 }
 
-/* GUTTER FALLBACK */
-
-@media (min-width: 900px) and (max-width: <?php echo $site_width - 1; ?>px) {
+@media (min-width: 900px) and (max-width: <?php echo $site_width; ?>px) {
 	.toc-gutter .toc-toggle { display: flex; }
 	.toc-gutter:not(.open) .widget-title { border-block-end: 0; }
 	.toc-gutter:not(.open) .toc-list { display: none; }
@@ -177,8 +174,6 @@
 	}
 	.toc-gutter:not(:last-child) { margin-block-end: var(--md-single); }
 }
-
-/* WIDE GUTTER */
 
 @media (min-width: <?php echo $site_width; ?>px) {
 	.has-toc-gutter .the-content { position: relative; }
@@ -202,6 +197,7 @@
 	}
 	.toc-gutter .widget-title {
 		border-block-end: 0;
+		font-family: <?php echo $font_family; ?>;
 		font-size: inherit;
 		gap: var(--md-small);
 		line-height: inherit;
@@ -220,9 +216,7 @@
 	.toc-gutter .toc-item-toggle { padding: var(--md-small); }
 }
 
-/* MOBILE DRAWER */
-
-@media (max-width: 899px) {
+@media (max-width: 900px) {
 	.toc {
 		background-color: var(--md-content-main-background);
 		border-block-start: 1px solid var(--md-border);

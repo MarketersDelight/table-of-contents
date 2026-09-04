@@ -6,18 +6,29 @@ tableOfContents: function() {
 	if ( ! toc )
 		return;
 
-	var content = document.getElementById( 'the_content' ),
+	var floatingAnchor, floatingTitle,
+		selectedIndex = null,
+		activeIndex = -1,
+		headings = [],
+		content = document.getElementById( 'the_content' ),
 		main = document.getElementById( 'main' ),
-		headings = Array.from( content.querySelectorAll( 'h2, h3, h4, h5, h6' ) ),
+		toggle = toc.querySelector( '.toc-toggle' ),
+		contentHeadings = Array.from( content.querySelectorAll( 'h2, h3, h4, h5, h6' ) ),
 		items = Array.from( toc.querySelectorAll( '.toc-item' ) ),
 		links = Array.from( toc.querySelectorAll( '.toc-item-label' ) ),
-		toggle = toc.querySelector( '.toc-toggle' ),
-		floatingToc = toc.classList.contains( 'toc-float' ) && toc.classList.contains( 'toc-sticky' ) ? toc : null,
 		desktop = window.matchMedia( '(min-width: 900px)' ),
-		activeIndex = -1,
-		selectedIndex = null,
-		floatingAnchor,
-		floatingTitle;
+		floatingToc = toc.classList.contains( 'toc-float' ) && toc.classList.contains( 'toc-sticky' ) ? toc : null;
+
+	var contentIndex = 0;
+
+	for ( var i = 0; i < links.length; i++ ) {
+		var linkedTarget = document.getElementById( links[i].getAttribute( 'href' ).slice( 1 ) );
+
+		if ( linkedTarget && ! content.contains( linkedTarget ) )
+			headings.push( linkedTarget );
+		else
+			headings.push( contentHeadings[contentIndex++] );
+	}
 
 	function setOpen( isOpen ) {
 		toc.classList.toggle( 'open', isOpen );
@@ -151,7 +162,6 @@ tableOfContents: function() {
 	window.addEventListener( 'touchmove', clearSelectedItem, { passive: true } );
 	window.addEventListener( 'keydown', function( event ) {
 		var scrollKeys = [ 'ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' ' ];
-
 		if ( scrollKeys.indexOf( event.key ) !== -1 )
 			clearSelectedItem();
 	} );
@@ -173,7 +183,6 @@ tableOfContents: function() {
 		update( window.scrollY );
 	}
 
-	// Repeat the browser's initial hash jump after sticky measurements are ready.
 	function scrollToCurrentHeading() {
 		if ( ! window.location.hash )
 			return;
@@ -196,6 +205,7 @@ tableOfContents: function() {
 
 	updateStickyOffset();
 	scrollToCurrentHeading();
+
 	window.addEventListener( 'load', function() {
 		updateStickyOffset();
 		scrollToCurrentHeading();
