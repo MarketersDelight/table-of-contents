@@ -26,6 +26,10 @@ $fields->field( 'toc', array(
 $fields->field( 'toc_position', array(
 	'type' => 'select',
 	'empty_label' => $position_label,
+	'inherit' => array(
+		'default' => 'inline',
+		'format' => __( 'Show default (%s)', 'md-toc' )
+	),
 	'options' => $position_options
 ) );
 ?>

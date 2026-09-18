@@ -70,15 +70,11 @@ class md_table_of_contents extends md_api {
 		$toggle_label = __( 'Add <b>Table of Contents</b>', 'md-toc' );
 		$sticky_label = __( 'Make sticky', 'md-toc' );
 		$position_options = $this->position_options();
-		$position_label = $fields->inherit_label( 'toc_position', __( 'Top of post', 'md-toc' ), $position_options );
+		$position_label = __( 'Top of post', 'md-toc' );
 
 		if ( $context['is_post'] ) {
 			$global_add = md_post_type_field( array( 'layout', 'toc', 'add' ), null, $context['post_type'] );
 			$global_sticky = md_post_type_field( array( 'layout', 'toc', 'sticky' ), null, $context['post_type'] );
-			$global_position = md_post_type_field( array( 'layout', 'toc_position' ), 'inline', $context['post_type'] );
-			$global_position_label = $position_options[$global_position] ?? $position_options['inline'];
-
-			$position_label = sprintf( __( 'Show default (%s)', 'md-toc' ), $global_position_label );
 			$sticky_label = $global_sticky ? __( 'Disable sticky', 'md-toc' ) : $sticky_label;
 
 			if ( $global_add ) {
