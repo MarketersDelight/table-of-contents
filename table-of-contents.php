@@ -6,6 +6,7 @@
  * Author URI: https://marketersdelight.com/
  * Drop-in URI: https://marketersdelight.com/dropins/table-of-contents/
  * Drop-in Slug: table-of-contents
+ * Text Domain: md-toc
  * Version: 2.0
  * Requires at least: 6.6
  * Requires PHP: 7.4

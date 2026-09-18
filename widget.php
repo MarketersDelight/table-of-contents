@@ -18,8 +18,8 @@ class md_table_of_contents_widget extends WP_Widget {
 	public function __construct( $table_of_contents ) {
 		$this->table_of_contents = $table_of_contents;
 
-		parent::__construct( 'md_table_of_contents_widget', __( 'MD &rarr; Table of Contents', 'md' ), array(
-			'description' => __( 'Show a table of contents for the currently viewed post.', 'md' ),
+		parent::__construct( 'md_table_of_contents_widget', __( 'MD &rarr; Table of Contents', 'md-toc' ), array(
+			'description' => __( 'Show a table of contents for the currently viewed post.', 'md-toc' ),
 			'customize_selective_refresh' => true
 		) );
 	}
@@ -71,7 +71,7 @@ class md_table_of_contents_widget extends WP_Widget {
 	?>
 
     <p>
-        <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php echo __( 'Title', 'md' ); ?>:</label><br />
+        <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php echo __( 'Title', 'md-toc' ); ?>:</label><br />
         <input type="text" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo esc_attr( $val['title'] ); ?>" class="widefat" />
     </p>
 
