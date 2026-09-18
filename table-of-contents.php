@@ -1,11 +1,14 @@
 <?php
 /**
- * Dropin Name: Table of Contents
- * Version: 2.0
- * Dropin URI: https://marketersdelight.com/dropins/table-of-contents/
+ * Drop-in Name: Table of Contents
  * Description: An auto-generated table of contents for your articles with deep layout integration and powerful functionality.
  * Author: Alex, Kolakube
- * Author URI: https://kolakube.com/
+ * Author URI: https://marketersdelight.com/
+ * Drop-in URI: https://marketersdelight.com/dropins/table-of-contents/
+ * Drop-in Slug: table-of-contents
+ * Version: 2.0
+ * Requires at least: 6.6
+ * Requires PHP: 7.4
  */
 
 class md_table_of_contents extends md_api {

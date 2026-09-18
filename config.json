@@ -5,7 +5,6 @@
   "description": "An auto-generated table of contents for your articles with deep layout integration and powerful functionality.",
   "dropin_url": "https://marketersdelight.com/dropins/table-of-contents",
   "author_url": "https://kolakube.com/",
-  "settings_url": "admin.php?page=md_settings&tab=md_content#table_of_contents",
   "icon": "dashicons-editor-table",
   "colors": "#d36c30, #FFFFFF"
 }
