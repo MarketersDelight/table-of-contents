@@ -134,6 +134,7 @@
 		padding-block: var(--md-third);
 		position: sticky;
 			inset-block-start: var(--toc-sticky-offset);
+		z-index: 60;
 	}
 
 	/* INLINE + GUTTER BOX */
