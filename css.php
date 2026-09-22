@@ -119,6 +119,9 @@
 	.toc-widget .widget-title { margin-block-end: var(--md-half); }
 	.toc-widget .toc-list { margin-inline-start: calc(-1 * var(--md-half)); }
 	.sidebar .widget_md_table_of_contents_widget {
+		background-color: var(--md-content-main-background);
+		background-image: linear-gradient(var(--md-sidebar-background), var(--md-sidebar-background));
+		padding-block: var(--md-third);
 		position: sticky;
 			inset-block-start: var(--toc-sticky-offset);
 	}
@@ -205,13 +208,15 @@
 	}
 	.toc-gutter .toc-list { padding: 0; }
 	.toc-gutter .toc-item-label {
-		border-color: var(--md-border);
+		border: 0;
 		padding-inline-end: var(--md-small);
 	}
-	.toc-gutter-left .toc-item-label {
+	.toc-gutter .toc-item-title { border-inline-start: 3px solid var(--md-border); }
+	.toc-gutter-left .toc-item-title {
 		border-inline-end: 3px solid var(--md-border);
 		border-inline-start: 0;
 	}
+	.toc-gutter .active > .toc-item-title { border-color: var(--md-links); }
 	.toc-gutter .toc-h2 .toc-item-label { padding-inline-start: var(--md-third); }
 	.toc-gutter .toc-item-toggle { padding: var(--md-small); }
 }
