@@ -42,6 +42,7 @@ tableOfContents: function() {
 		var item = items[index];
 
 		item.classList.toggle( 'active', isActive );
+		item.classList.remove( 'collapsed-toc-item' );
 
 		if ( ! item.parentNode.classList.contains( 'toc-sublist' ) )
 			return;
@@ -136,8 +137,10 @@ tableOfContents: function() {
 
 		else if ( itemToggle ) {
 			var item = itemToggle.closest( '.toc-item' ),
-				isOpen = item.classList.toggle( 'toggle-toc-item' );
+				isOpen = ! item.classList.contains( 'collapsed-toc-item' ) && ( item.classList.contains( 'active' ) || item.classList.contains( 'child-active' ) || item.classList.contains( 'toggle-toc-item' ) );
 
+			item.classList.toggle( 'toggle-toc-item', ! isOpen );
+			item.classList.toggle( 'collapsed-toc-item', isOpen && ( item.classList.contains( 'active' ) || item.classList.contains( 'child-active' ) ) );
 			itemToggle.setAttribute( 'aria-expanded', isOpen || item.classList.contains( 'child-active' ) );
 		}
 

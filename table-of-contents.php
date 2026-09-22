@@ -194,7 +194,7 @@ class md_table_of_contents extends md_api {
 		if ( ! is_singular() )
 			return;
 
-		if ( empty( $this->headings() ) )
+		if ( count( $this->headings() ) < 2 )
 			return;
 
 		$enable = md_module( array( 'layout', 'toc', 'add' ) ) && ! md_module( array( 'layout', 'toc', 'remove' ) );
