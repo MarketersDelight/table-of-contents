@@ -196,6 +196,7 @@
 		box-shadow: none;
 		font-size: calc(var(--md-font-size-sm) - 2px);
 		line-height: calc(var(--md-line-height-sm) - 1px);
+		padding-block-start: var(--md-single);
 		padding-inline: var(--md-half);
 		position: absolute;
 		inset-block: 0;
