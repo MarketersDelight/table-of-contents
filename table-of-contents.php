@@ -8,7 +8,7 @@
  * Drop-in Slug: table-of-contents
  * Text Domain: md-toc
  * Version: 2.0
- * Requires at least: 6.6
+ * Requires at least: 6.2
  * Requires PHP: 7.4
  */
 
@@ -66,7 +66,7 @@ class md_table_of_contents extends md_api {
 	 */
 
 	public function layout_fields( $fields, $context ) {
-		if ( ! $context['is_post'] && ! $context['is_admin'] )
+		if ( ( ! $context['is_post'] && ! $context['is_admin'] ) || ! empty( $context['is_author'] ) )
 			return;
 
 		$invert = false;
