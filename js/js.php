@@ -22,10 +22,15 @@ tableOfContents: function() {
 	var contentIndex = 0;
 
 	for ( var i = 0; i < links.length; i++ ) {
-		var linkedTarget = document.getElementById( links[i].getAttribute( 'href' ).slice( 1 ) );
+		var linkedTarget = document.getElementById( links[i].getAttribute( 'href' ).slice( 1 ) ),
+			linkedIndex = linkedTarget ? contentHeadings.indexOf( linkedTarget ) : -1;
 
-		if ( linkedTarget && ! content.contains( linkedTarget ) )
+		if ( linkedTarget && linkedIndex === -1 )
 			headings.push( linkedTarget );
+		else if ( linkedIndex !== -1 ) {
+			headings.push( linkedTarget );
+			contentIndex = linkedIndex + 1;
+		}
 		else
 			headings.push( contentHeadings[contentIndex++] );
 	}
