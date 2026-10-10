@@ -92,8 +92,8 @@
 
 .toc-sublist .toc-item-label {
 	color: var(--md-text-muted);
-	font-size: var(--md-font-size-tiny);
-	line-height: var(--md-line-height-tiny);
+	font-size: var(--md-font-size-small);
+	line-height: var(--md-line-height-small);
 }
 
 .toc-sublist .toc-item {
@@ -194,8 +194,8 @@
 	.toc-gutter {
 		background-color: transparent;
 		box-shadow: none;
-		font-size: var(--md-font-size-tiny);
-		line-height: var(--md-line-height-tiny);
+		font-size: var(--md-font-size-small);
+		line-height: var(--md-line-height-small);
 		padding-block-start: var(--md-single);
 		padding-inline: var(--md-half);
 		position: absolute;
