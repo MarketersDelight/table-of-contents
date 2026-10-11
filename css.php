@@ -194,8 +194,8 @@
 	.toc-gutter {
 		background-color: transparent;
 		box-shadow: none;
-		font-size: var(--md-font-size-small);
-		line-height: var(--md-line-height-small);
+		font-size: var(--md-font-size-tiny);
+		line-height: var(--md-line-height-tiny);
 		padding-block-start: var(--md-single);
 		padding-inline: var(--md-half);
 		position: absolute;
@@ -219,12 +219,16 @@
 		line-height: inherit;
 		padding: 0 0 var(--md-third);
 	}
+	.toc-gutter .toc-inner { background-color: var(--md-content-main-background); }
+	.is-box-style .toc-gutter .toc-inner { background-color: var(--md-content-box-background); }
 	.toc-gutter .toc-list { padding: 0; }
 	.toc-gutter .toc-item-label {
 		border: 0;
 		padding-inline-end: var(--md-small);
 	}
 	.toc-gutter .toc-sublist .toc-item-label {
+		font-size: inherit;
+		line-height: inherit;
 		padding-inline-start: 0;
 	}
 	.toc-gutter .toc-item-title { border-inline-start: 3px solid var(--md-border); }
