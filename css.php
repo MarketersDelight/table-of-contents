@@ -219,7 +219,10 @@
 		line-height: inherit;
 		padding: 0 0 var(--md-third);
 	}
-	.toc-gutter .toc-inner { background-color: var(--md-content-main-background); }
+	.toc-gutter .toc-inner {
+		background-color: var(--md-content-main-background);
+		border-radius: var(--md-border-radius);
+	}
 	.is-box-style .toc-gutter .toc-inner { background-color: var(--md-content-box-background); }
 	.toc-gutter .toc-list { padding: 0; }
 	.toc-gutter .toc-item-label {
