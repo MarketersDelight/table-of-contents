@@ -60,6 +60,13 @@
 
 		</ol>
 
+		<div class="toc-footer border has-divider-border-color">
+			<?php do_action( 'md_toc_footer_top', $args, get_queried_object_id() ); ?>
+			<a href="#" data-toc-top class="tiny has-muted-color fl gap-third block-half-top"><?php echo md_icon( 'angle-up' ); ?> <?php esc_html_e( 'Back to top', 'md-toc' ); ?></a>
+			<?php do_action( 'md_toc_footer_items', $args, get_queried_object_id() ); ?>
+			<?php do_action( 'md_toc_footer_bottom', $args, get_queried_object_id() ); ?>
+		</div>
+
 		<?php echo apply_filters( 'md_toc_html', '', $args, get_queried_object_id() ); ?>
 
 	</div>

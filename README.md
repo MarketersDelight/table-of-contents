@@ -12,6 +12,7 @@ A [Marketers Delight](https://marketersdelight.com/) drop-in that builds a table
 - Gutter placements need a Layout with no sidebar and no page builder. Otherwise the table of contents shows at the top of the post.
 - On screens under 900px, it shows as an expandable bar fixed to the bottom of the screen
 - Scroll positions account for the WordPress admin bar and MD's sticky header
+- A Back to top link in the footer that closes the list and scrolls to the top
 - Semantic markup: `<nav>` with an ordered list, plus `aria-expanded` and `aria-controls` on the toggles
 - Styles and scripts are added to MD's compiled stylesheet and scripts
 
@@ -31,6 +32,7 @@ Headings are read when a post is saved. Posts written before you install the dro
 
 - `md_toc_headings`: filter the heading list for the current post. Arguments: `$headings` (each item holds `tag`, `id` and `text`) and `$post_id`.
 - `md_toc_html`: add HTML after the list, inside the table of contents. Arguments: `$html` (empty string), `$args` and `$post_id`.
+- `md_toc_footer_top`, `md_toc_footer_items`, `md_toc_footer_bottom`: actions that add content to the footer, before, after and at the end of the Back to top link. Arguments: `$args` and `$post_id`. Escape your output.
 
 ## Requirements
 

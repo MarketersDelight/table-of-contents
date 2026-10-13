@@ -137,7 +137,18 @@ tableOfContents: function() {
 		var itemToggle = event.target.closest( '.toc-item-toggle' ),
 			link = event.target.closest( '.toc-item-label' );
 
-		if ( event.target.closest( '.toc-toggle' ) )
+		if ( event.target.closest( '[data-toc-top]' ) ) {
+			event.preventDefault();
+			selectedIndex = null;
+			setOpen( false );
+			window.history.replaceState( window.history.state, '', window.location.pathname + window.location.search );
+			window.scrollTo( {
+				top: 0,
+				behavior: window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches ? 'auto' : 'smooth'
+			} );
+		}
+
+		else if ( event.target.closest( '.toc-toggle' ) )
 			setOpen( ! toc.classList.contains( 'open' ) );
 
 		else if ( itemToggle ) {
