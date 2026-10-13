@@ -113,7 +113,7 @@
 /* FOOTER */
 .toc .toc-list { margin-block-end: var(--md-half); }
 .toc .toc-inner > .toc-footer.border { border-width: 1px 0 0; margin-block-start: 0; }
-:is(.toc-inline, .toc-gutter) .toc-footer { margin-inline: var(--md-half); margin-block-end: var(--md-half); }
+:is(.toc-inline, .toc-gutter) .toc-footer { margin-inline: var(--md-half); padding-block-end: var(--md-half); }
 
 /* HEADING POSITION */
 
@@ -270,11 +270,12 @@
 	.toc.open .widget-title { border-block-end: 1px solid var(--md-border); }
 	.toc .toc-list {
 		display: none;
+		margin-block-end: 0;
 		max-height: calc(100vh - var(--md-triple));
 		overflow-y: auto;
 		padding: var(--md-half);
 	}
 	.toc.open .toc-list { display: block; }
 	.toc:not(.open) .toc-footer { display: none; }
-	.toc .toc-footer { margin-inline: var(--md-half); padding-block-end: var(--md-half); }
+	.toc .toc-footer { margin-inline: var(--md-half); margin-block-end: 0; padding-block-end: var(--md-half); }
 }
