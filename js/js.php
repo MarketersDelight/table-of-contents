@@ -49,6 +49,11 @@ tableOfContents: function() {
 		item.classList.toggle( 'active', isActive );
 		item.classList.remove( 'collapsed-toc-item' );
 
+		var itemToggle = item.querySelector( '.toc-item-toggle' );
+
+		if ( itemToggle )
+			itemToggle.setAttribute( 'aria-expanded', isActive || item.classList.contains( 'toggle-toc-item' ) );
+
 		if ( ! item.parentNode.classList.contains( 'toc-sublist' ) )
 			return;
 
@@ -125,6 +130,14 @@ tableOfContents: function() {
 		headings[i].classList.add( 'toc-heading' );
 	}
 
+	// Show the full heading on hover only when its label is clamped.
+	toc.addEventListener( 'mouseover', function( e ) {
+		var label = e.target.closest( '.toc-item-label' );
+
+		if ( label )
+			label.title = label.scrollHeight > label.clientHeight + 1 ? label.textContent.trim() : '';
+	} );
+
 	if ( floatingToc ) {
 		floatingAnchor = document.createElement( 'span' );
 		floatingAnchor.className = 'toc-float-anchor';
@@ -157,7 +170,7 @@ tableOfContents: function() {
 
 			item.classList.toggle( 'toggle-toc-item', ! isOpen );
 			item.classList.toggle( 'collapsed-toc-item', isOpen && ( item.classList.contains( 'active' ) || item.classList.contains( 'child-active' ) ) );
-			itemToggle.setAttribute( 'aria-expanded', isOpen || item.classList.contains( 'child-active' ) );
+			itemToggle.setAttribute( 'aria-expanded', ! isOpen );
 		}
 
 		else if ( link ) {

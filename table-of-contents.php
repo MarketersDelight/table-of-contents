@@ -7,7 +7,7 @@
  * Drop-in URI: https://marketersdelight.com/dropins/table-of-contents/
  * Drop-in Slug: table-of-contents
  * Text Domain: md-toc
- * Version: 2.0.2
+ * Version: 2.0.3
  * Requires at least: 6.2
  * Requires PHP: 7.4
  */
@@ -233,6 +233,13 @@ class md_table_of_contents extends md_api {
 
 		$post_id = get_queried_object_id();
 		$headings = md_post_meta( array( $this->id, 'list' ), $post_id, array() );
+
+		// Older saved headings include attributes alongside the tag name.
+		foreach ( $headings as &$heading ) {
+			if ( preg_match( '/^h[2-6]\b/i', $heading['tag'], $match ) )
+				$heading['tag'] = strtolower( $match[0] );
+		}
+		unset( $heading );
 
 		$this->headings = apply_filters( 'md_toc_headings', $headings, $post_id );
 

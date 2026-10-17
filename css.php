@@ -71,13 +71,21 @@
 }
 
 .toc-item-label {
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
 	border-inline-start: 3px solid transparent;
-	color: inherit;
-	display: block;
+	color: var(--md-text-muted);
+	display: -webkit-box;
 	flex: 1;
+	line-clamp: 2;
+	line-height: 1.45;
+	overflow: hidden;
 	padding: var(--md-small) var(--md-half);
 	text-decoration: none;
 }
+
+.toc-item-title:hover > .toc-item-label,
+.toc-item-label:focus-visible { color: var(--md-text); }
 
 .toc .active > .toc-item-title .toc-item-label {
 	border-color: var(--md-links);
@@ -91,7 +99,6 @@
 .toc-h6 .toc-item-label { padding-inline-start: calc(var(--md-half) + var(--md-third) * 6); }
 
 .toc-sublist .toc-item-label {
-	color: var(--md-text-muted);
 	font-size: var(--md-font-size-small);
 	line-height: var(--md-line-height-small);
 }
@@ -104,9 +111,21 @@
 
 .toc-trigger { transition: transform var(--md-transition); }
 
+.toc-item-toggle .toc-trigger {
+	align-items: center;
+	background-color: rgba(0, 0, 0, 0.06);
+	block-size: 1.4em;
+	border-radius: 50%;
+	display: inline-flex;
+	inline-size: 1.4em;
+	justify-content: center;
+	transition: background-color var(--md-transition), transform var(--md-transition);}
+
+.toc-item-toggle:is(:hover, :focus-visible) .toc-trigger { background-color: rgba(0, 0, 0, 0.12); }
+
 .toc-sublist { display: none; }
 
-.toc-item:is(.active, .child-active, .toggle-toc-item):not(.collapsed-toc-item) .toc-sublist { display: block; }
+.toc-item:is(.active, .child-active, .toggle-toc-item):not(.collapsed-toc-item) > .toc-sublist { display: block; }
 .toc.open .toc-toggle .toc-trigger,
 .toc-item.toggle-toc-item > .toc-item-title .toc-trigger { transform: rotate(180deg); }
 
@@ -207,8 +226,14 @@
 		inset-block: 0;
 		width: max(0px, calc((100% - var(--md-width-post)) / 2));
 	}
-	.toc-gutter-left .toc-gutter { inset-inline-start: 0; }
-	.toc-gutter-right .toc-gutter { inset-inline-end: 0; }
+	.toc-gutter-left .toc-gutter {
+		inset-inline-start: 0;
+		padding-inline-start: var(--md-small);
+	}
+	.toc-gutter-right .toc-gutter {
+		inset-inline-end: 0;
+		padding-inline-end: var(--md-small);
+	}
 	.toc-gutter.toc-sticky .toc-inner {
 		max-height: calc(100vh - var(--toc-sticky-offset) - var(--md-half));
 		overflow-y: auto;
@@ -223,6 +248,7 @@
 		gap: var(--md-small);
 		line-height: inherit;
 		padding: 0 0 var(--md-third);
+		padding-inline-start: var(--md-third);
 	}
 	.toc-gutter .toc-inner {
 		background-color: var(--md-content-main-background);
