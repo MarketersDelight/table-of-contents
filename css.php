@@ -263,7 +263,6 @@
 	.toc-gutter .toc-sublist .toc-item-label {
 		font-size: inherit;
 		line-height: inherit;
-		padding-inline-start: 0;
 	}
 	.toc-gutter .toc-item-title { border-inline-start: 3px solid var(--md-border); }
 	.toc-gutter-left .toc-item-title {
@@ -280,6 +279,10 @@
 	}
 	.toc-gutter .active > .toc-item-title { border-color: var(--md-links); }
 	.toc-gutter .toc-h2 .toc-item-label { padding-inline-start: var(--md-third); }
+	.toc-gutter .toc-sublist .toc-item { margin-inline-start: 0; }
+	.toc-gutter .toc-sublist .toc-item-label { padding-inline-start: calc(var(--md-third) * 2); }
+	.toc-gutter .toc-sublist .toc-sublist .toc-item-label { padding-inline-start: calc(var(--md-third) * 3); }
+	.toc-gutter .toc-sublist .toc-sublist .toc-sublist .toc-item-label { padding-inline-start: calc(var(--md-third) * 4); }
 	.toc-gutter .toc-item-toggle { padding-inline: var(--md-half); }
 }
 
