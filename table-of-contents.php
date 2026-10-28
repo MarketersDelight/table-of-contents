@@ -152,7 +152,7 @@ class md_table_of_contents extends md_api {
 	 */
 
 	public function widgets() {
-		require_once 'widget.php';
+		require_once __DIR__ . '/widget.php';
 
 		register_widget( new md_table_of_contents_widget( $this ) );
 	}
