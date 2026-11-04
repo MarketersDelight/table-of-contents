@@ -3,7 +3,6 @@
 <?php
 
 $fields->field( 'toc', array(
-	'type' => 'checkbox',
 	'label' => __( 'Table of Contents', 'md-toc' ),
 	'classes' => 'md-conditional-option',
 	'options' => array(
@@ -17,14 +16,12 @@ $fields->field( 'toc', array(
 <?php
 
 $fields->field( 'toc', array(
-	'type' => 'checkbox',
 	'options' => array(
 		'sticky' => $sticky_label
 	)
 ) );
 
 $fields->field( 'toc_position', array(
-	'type' => 'select',
 	'empty_label' => $position_label,
 	'inherit' => array(
 		'default' => 'inline',
