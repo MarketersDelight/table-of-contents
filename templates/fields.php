@@ -1,4 +1,4 @@
-<div class="md-conditional md-sep-small-top<?php echo $invert ? ' md-conditional-invert' : ''; ?>">
+<div class="md-conditional mt-single<?php echo $invert ? ' md-conditional-invert' : ''; ?>">
 
 <?php
 

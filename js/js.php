@@ -17,7 +17,9 @@ tableOfContents: function() {
 		items = Array.from( toc.querySelectorAll( '.toc-item' ) ),
 		links = Array.from( toc.querySelectorAll( '.toc-item-label' ) ),
 		desktop = window.matchMedia( '(min-width: 900px)' ),
-		floatingToc = toc.classList.contains( 'toc-float' ) && toc.classList.contains( 'toc-sticky' ) ? toc : null;
+		floatingToc = toc.classList.contains( 'toc-float' ) && toc.classList.contains( 'toc-sticky' ) ? toc : null,
+		gutterInner = toc.matches( '.toc-gutter.toc-sticky' ) ? toc.querySelector( '.toc-inner' ) : null,
+		wideBlocks = gutterInner ? Array.from( content.querySelectorAll( '.alignwide, .alignfull' ) ) : [];
 
 	var contentIndex = 0;
 
@@ -112,6 +114,15 @@ tableOfContents: function() {
 			nextActiveIndex = headings.length - 1;
 
 		setActiveItem( selectedIndex === null ? nextActiveIndex : selectedIndex );
+
+		if ( wideBlocks.length ) {
+			var tocRect = gutterInner.getBoundingClientRect();
+
+			toc.classList.toggle( 'fadeout', wideBlocks.some( function( block ) {
+				var rect = block.getBoundingClientRect();
+				return rect.bottom > tocRect.top && rect.top < tocRect.bottom;
+			} ) );
+		}
 	}
 
 	var usedIds = {};

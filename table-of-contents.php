@@ -10,7 +10,9 @@
  * Version: 2.0.4
  * Requires at least: 6.2
  * Requires PHP: 7.4
- * Requires MD: 6.0
+ * Requires MD: 6.2
+ * Icon: dashicons-editor-table
+ * Colors: #d36c30, #FFFFFF
  */
 
 class md_table_of_contents extends md_api {
