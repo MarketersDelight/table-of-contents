@@ -37,7 +37,10 @@ class md_table_of_contents extends md_api {
 
 		add_action( 'md_hook_layout_after_toggles', array( $this, 'layout_fields' ), 10, 2 );
 
-		add_filter( 'md_filter_save_layout_fields', function( $fields ) {
+		add_filter( 'md_filter_save_layout_fields', function( $fields, $screen = '' ) {
+			if ( in_array( $screen, array( 'term', 'taxonomy' ), true ) )
+				return $fields;
+
 			$fields['toc'] = array(
 				'type' => 'checkbox',
 				'options' => array( 'add', 'remove', 'sticky' )
@@ -47,7 +50,7 @@ class md_table_of_contents extends md_api {
 				'options' => array( 'inline', 'gutter-left', 'gutter-right' )
 			);
 			return $fields;
-		} );
+		}, 10, 2 );
 	}
 
 	/**
