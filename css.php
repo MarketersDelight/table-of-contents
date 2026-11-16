@@ -73,6 +73,7 @@
 .toc-item-label {
 	-webkit-box-orient: vertical;
 	-webkit-line-clamp: 2;
+	border-block: var(--md-small) solid transparent;
 	border-inline-start: 3px solid transparent;
 	color: var(--md-text-muted);
 	display: -webkit-box;
@@ -80,7 +81,7 @@
 	line-clamp: 2;
 	line-height: 1.45;
 	overflow: hidden;
-	padding: var(--md-small) var(--md-half);
+	padding-inline: var(--md-half);
 	text-decoration: none;
 }
 
@@ -88,7 +89,7 @@
 .toc-item-label:focus-visible { color: var(--md-text); }
 
 .toc .active > .toc-item-title .toc-item-label {
-	border-color: var(--md-links);
+	border-inline-start-color: var(--md-links);
 	color: var(--md-links);
 	font-weight: var(--md-bold);
 }
@@ -268,7 +269,7 @@
 		padding: 0;
 	}
 	.toc-gutter .toc-item-label {
-		border: 0;
+		border-inline: 0;
 		padding-inline-end: var(--md-small);
 	}
 	.toc-gutter .toc-sublist .toc-item-label {
